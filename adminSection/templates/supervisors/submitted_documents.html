@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block start %}
+<script src="https://cdn.tailwindcss.com"></script>
+<div class="max-w-6xl mx-auto mt-10 p-6 bg-white shadow-md rounded-xl">
+    <h1 class="text-2xl font-bold text-[#327b32] mb-6 text-center">📂 View Submitted Documents</h1>
+
+    {% if not phase1_docs and not phase2_docs %}
+        <div class="flex flex-col items-center justify-center py-16">
+            <svg class="w-16 h-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M3 7v4a2 2 0 002 2h4m6 0h4a2 2 0 002-2V7m-6 6v4m-4-4v4m0 0H7m10 0h-4"/>
+            </svg>
+            <p class="text-gray-500 text-lg font-medium">No students have uploaded any documents yet.</p>
+        </div>
+    {% else %}
+
+        <!-- PHASE 1 -->
+        <div class="mb-10">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Phase 1 Submissions</h2>
+            {% if phase1_docs %}
+                <div class="overflow-x-auto">
+                    <table class="min-w-full border border-gray-200 text-sm">
+                        <thead class="bg-gray-100">
+                            <tr class="text-left text-gray-700">
+                                <th class="px-4 py-2 border">#</th>
+                                <th class="px-4 py-2 border">Student</th>
+                                <th class="px-4 py-2 border">Title</th>
+                                <th class="px-4 py-2 border">Submitted On</th>
+                                <th class="px-4 py-2 border text-center">Document</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for doc in phase1_docs %}
+                                <tr class="border-b hover:bg-gray-50">
+                                    <td class="px-4 py-2 border">{{ forloop.counter }}</td>
+                                    <td class="px-4 py-2 border">{{ doc.submitted_by.get_full_name|default:doc.submitted_by.username }}</td>
+                                    <td class="px-4 py-2 border">{{ doc.title }}</td>
+                                    <td class="px-4 py-2 border">{{ doc.submitted_at|date:"M d, Y" }}</td>
+                                    <td class="px-4 py-2 border text-center">
+                                        <a href="{{ doc.document.url }}" target="_blank"
+                                           class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-xs">
+                                            View / Download
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-gray-500 text-center italic py-4">No Phase 1 submissions yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- PHASE 2 -->
+        <div>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Phase 2 Submissions</h2>
+            {% if phase2_docs %}
+                <div class="overflow-x-auto">
+                    <table class="min-w-full border border-gray-200 text-sm">
+                        <thead class="bg-gray-100">
+                            <tr class="text-left text-gray-700">
+                                <th class="px-4 py-2 border">#</th>
+                                <th class="px-4 py-2 border">Student</th>
+                                <th class="px-4 py-2 border">Title</th>
+                                <th class="px-4 py-2 border">Submitted On</th>
+                                <th class="px-4 py-2 border text-center">Document</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for doc in phase2_docs %}
+                                <tr class="border-b hover:bg-gray-50">
+                                    <td class="px-4 py-2 border">{{ forloop.counter }}</td>
+                                    <td class="px-4 py-2 border">{{ doc.submitted_by.get_full_name|default:doc.submitted_by.username }}</td>
+                                    <td class="px-4 py-2 border">{{ doc.title }}</td>
+                                    <td class="px-4 py-2 border">{{ doc.submitted_at|date:"M d, Y" }}</td>
+                                    <td class="px-4 py-2 border text-center">
+                                        <a href="{{ doc.document.url }}" target="_blank"
+                                           class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-xs">
+                                            View / Download
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-gray-500 text-center italic py-4">No Phase 2 submissions yet.</p>
+            {% endif %}
+        </div>
+
+    {% endif %}
+</div>
+{% endblock %}

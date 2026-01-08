@@ -1,0 +1,19 @@
+# Ignore Python virtual environment folder
+myenv/
+venv/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+
+# Environment variables file
+.env
+# Log files
+debug.log
+error.log

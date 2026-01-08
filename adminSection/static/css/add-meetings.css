@@ -1,0 +1,185 @@
+/* Global styles */
+body {
+  background-color: #f5f7fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h2,
+h4 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Container */
+.meeting-container {
+  max-width: 100%;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+/* Buttons */
+.join-btn,
+.btn-primary {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.join-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.join-btn:hover {
+  background-color: #218838;
+}
+
+.btn-primary {
+  background-color: #327b32;
+  color: white;
+  margin-top: 1rem;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.btn-danger,
+.btn-danger2 {
+  border: none;
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-danger2 {
+  background-color: transparent;
+  color: inherit;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+/* Cards */
+.card {
+  background-color: #fff;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  background-color: #f0f2f5;
+  padding: 18px 24px;
+  border-bottom: 1px solid #ddd;
+  font-weight: 600;
+  font-size: 18px;
+  color: #222;
+}
+
+.card-body {
+  padding: 24px;
+}
+
+/* Forms */
+.form-label {
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: block;
+  margin-top: 11px;
+}
+
+.form-control,
+.form-select {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Table styles */
+.table-responsive {
+  margin-top: 20px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.table th {
+  background-color: #f9fafb;
+  font-weight: 600;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f7f9fc;
+}
+
+/* Actions & Icons */
+.action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-buttons form {
+  display: inline;
+}
+
+.fa-pen-to-square {
+  font-size: 25px;
+}
+
+/* Utility */
+.for-center {
+  display: flex;
+  justify-content: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .row {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .col-md-6 {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .card-header h4,
+  h2 {
+    font-size: 20px;
+  }
+}

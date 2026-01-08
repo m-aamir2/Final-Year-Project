@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+
+{% endblock %}
+{% block start %}
+
+<div class="min-h-screen bg-gray-50 flex items-center justify-center py-10 px-4">
+    <div class="w-full max-w-4xl bg-white rounded-3xl shadow-lg p-8 border border-gray-100 relative overflow-hidden">
+
+        <!-- Gradient Accent -->
+        <div class="absolute inset-0 rounded-3xl bg-gray-50 pointer-events-none ">
+</div>
+        <!-- Header -->
+        <div class="relative text-center mb-10">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">Your Profile</h2>
+            <p class="text-gray-500">Manage your personal and academic details below</p>
+        </div>
+
+        <!-- Success Alert -->
+        {% if messages %}
+        {% for message in messages %}
+        {% if message == 'Profile updated successfully.' %}
+        <div class="relative mb-6">
+            <div
+                class="flex items-center justify-between bg-green-100 text-green-800 px-4 py-3 rounded-xl shadow-sm border border-green-200">
+                <span class="font-medium">{{ message }}</span>
+                <button class="text-green-700 hover:text-green-900"
+                    onclick="this.parentElement.parentElement.remove()">×</button>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+        <!-- Profile Form -->
+        <form method="POST" enctype="multipart/form-data" class="relative z-10 space-y-6">
+            {% csrf_token %}
+
+            <!-- Profile Picture -->
+            <div class="flex justify-center mb-6">
+                <label for="profile_image" class="cursor-pointer">
+                    {% if profile.profile_image %}
+                    <img src="{{ profile.profile_image.url }}" alt="Profile Picture" id="profile-img-preview"
+                        class="w-32 h-32 rounded-full object-cover shadow-md hover:scale-105 transition-transform duration-300">
+                    {% else %}
+                    <div id="avatar-placeholder"
+                        class="w-32 h-32 rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-md hover:scale-105 transition-transform duration-300">
+                        {{ user.first_name|slice:":1"|upper }}
+                    </div>
+                    {% endif %}
+                    <input type="file" name="profile_image" id="profile_image" accept="image/*" class="hidden">
+                </label>
+            </div>
+
+
+            <!-- Basic Info -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="name" class="block text-gray-700 font-medium mb-1">Name</label>
+                    <input type="text" id="name" name="name" value="{{ user.first_name|default_if_none:'' }}"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-400 focus:outline-none transition"
+                        required>
+                </div>
+
+                <div>
+                    <label for="email" class="block text-gray-700 font-medium mb-1">Email</label>
+                    <input type="email" id="email" name="email" value="{{ user.username|default_if_none:'' }}"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 bg-gray-100 cursor-not-allowed"
+                        readonly>
+                </div>
+
+                <div>
+                    <label for="phone" class="block text-gray-700 font-medium mb-1">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" value="{{ profile.phone|default_if_none:'' }}"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-400 focus:outline-none transition">
+                </div>
+
+                {% if profile.user_type == 'student' %}
+                <div>
+                    <label for="github_account" class="block text-gray-700 font-medium mb-1">GitHub Account</label>
+                    <input type="url" id="github_account" name="github_account"
+                        value="{{ profile.github_account|default_if_none:'' }}"
+                        placeholder="https://github.com/username"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-400 focus:outline-none transition">
+                </div>
+                {% elif profile.user_type == 'supervisor' or profile.user_type == 'coordinator' %}
+                <div>
+                    <label for="bachelors_from" class="block text-gray-700 font-medium mb-1">Bachelors From</label>
+                    <input type="text" id="bachelors_from" name="bachelors_from"
+                        value="{{ profile.bachelors_from|default_if_none:'' }}" placeholder="Enter your institution"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-400 focus:outline-none transition">
+                </div>
+                <div>
+                    <label for="masters_from" class="block text-gray-700 font-medium mb-1">Masters From</label>
+                    <input type="text" id="masters_from" name="masters_from"
+                        value="{{ profile.masters_from|default_if_none:'' }}" placeholder="Enter your institution"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-400 focus:outline-none transition">
+                </div>
+                <div>
+                    <label for="phd_from" class="block text-gray-700 font-medium mb-1">PhD From</label>
+                    <input type="text" id="phd_from" name="phd_from" value="{{ profile.phd_from|default_if_none:'' }}"
+                        placeholder="Enter your institution"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-400 focus:outline-none transition">
+                </div>
+                <div>
+                    <label for="office_location" class="block text-gray-700 font-medium mb-1">Office Location</label>
+                    <input type="text" id="office_location" name="office_location"
+                        value="{{ profile.office_location|default_if_none:'' }}"
+                        placeholder="Enter your office location"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-400 focus:outline-none transition">
+                </div>
+                <div>
+                    <label for="office_hours" class="block text-gray-700 font-medium mb-1">Office Hours</label>
+                    <input type="text" id="office_hours" name="office_hours"
+                        value="{{ profile.office_hours|default_if_none:'' }}" placeholder="Enter your office hours"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-400 focus:outline-none transition">
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex justify-end gap-4 mt-8">
+                <button type="button" onclick="redirectToHome()" class="px-6 py-2.5 rounded-xl font-medium text-[#327b32] border border-[#327b32]
+           bg-white hover:bg-gradient-to-r hover:from-[#327b32] hover:to-green-600
+           hover:text-white transition duration-300">
+                    Cancel
+                </button>
+
+                <button type="submit" class="px-6 py-2.5 rounded-xl text-white font-semibold transition duration-300
+           bg-gradient-to-r from-[#327b32] via-green-500 to-emerald-600
+           hover:shadow-lg hover:opacity-90">
+                    Save Changes
+                </button>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const profileImageInput = document.getElementById('profile_image');
+    const profileImagePreview = document.getElementById('profile-img-preview');
+    const avatarPlaceholder = document.getElementById('avatar-placeholder');
+
+    profileImageInput.addEventListener('change', function () {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                // If <img> exists, update it
+                if (profileImagePreview) {
+                    profileImagePreview.src = e.target.result;
+                } else {
+                    // If no <img>, replace placeholder with new image
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = 'Profile Picture';
+                    img.id = 'profile-img-preview';
+                    img.className =
+                        'w-32 h-32 rounded-full object-cover shadow-md hover:scale-105 transition-transform duration-300';
+                    avatarPlaceholder.replaceWith(img);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    function redirectToHome() {
+        const userRole = "{{ user_role }}";
+        const routes = {
+            admin: "{% url 'home' %}",
+            coordinator: "{% url 'home' %}",
+            student: "{% url 'home_students' %}",
+            supervisor: "{% url 'home_supervisors' %}"
+        };
+        window.location.href = routes[userRole] || "{% url 'home' %}";
+    }
+
+    // Generate consistent color based on string (HSL value)
+    function stringToColor(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        return `hsl(${hash % 360}, 70%, 55%)`;
+    }
+
+    // Apply random color to avatar placeholder if no profile image
+    if (avatarPlaceholder) {
+        const username = "{{ user.first_name|default:'User' }}";
+        avatarPlaceholder.style.backgroundColor = stringToColor(username);
+    }
+</script>
+
+{% endblock %}

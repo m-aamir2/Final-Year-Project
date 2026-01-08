@@ -1,0 +1,184 @@
+.assigned-projects-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.projects-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.projects-table {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.projects-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.projects-table th {
+    background-color: #f8f9fa;
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #2c3e50;
+    border-bottom: 2px solid #eee;
+}
+
+.projects-table td {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.projects-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+.student-tag {
+    display: inline-block;
+    background-color: #e3f2fd;
+    color: #1976d2;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    font-size: 13px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.status-badge.approved {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.btn-view {
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: #17a2b8;
+    color: white;
+}
+
+.btn-view:hover {
+    background-color: #138496;
+}
+
+.no-projects {
+    text-align: center;
+    color: #6c757d;
+    padding: 30px;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.status-badge.pending-review {
+    background-color: #FFA500;
+    color: white;
+}
+
+.status-badge.pending-coordinator {
+    background-color: #1E90FF;
+    color: white;
+}
+
+.status-badge.approved {
+    background-color: #32CD32;
+    color: white;
+}
+
+.status-badge.rejected {
+    background-color: #FF0000;
+    color: white;
+}
+
+/* Rejection Details */
+.rejection-details {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+    padding: 5px;
+    background: #f8f8f8;
+    border-radius: 4px;
+}
+
+.rejection-details div {
+    margin-top: 3px;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-approve,
+.btn-reject,
+.btn-view {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-approve {
+    background-color: #32CD32;
+    color: white;
+}
+
+.btn-reject {
+    background-color: #FF0000;
+    color: white;
+}
+
+.btn-view {
+    background-color: #1E90FF;
+    color: white;
+}
+
+/* Status Filter */
+.status-filter {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.status-filter label {
+    font-weight: 500;
+}
+
+.status-filter select {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}

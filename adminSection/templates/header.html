@@ -1,0 +1,143 @@
+{% load static %}
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Google Fonts: Inter and Montserrat -->
+<style>
+    .dropdown-item {
+        display: block;
+        padding: 10px 15px;
+        text-decoration: none;
+        color: #333;
+        transition: background 0.2s;
+    }
+
+    .main-content header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .main-content header h2 {
+        font-size: 28px;
+        font-weight: 600;
+    }
+
+    .dropdown-item:hover {
+        text-decoration: underline;
+        color: #327b32;
+    }
+
+    .lg-btn:hover {
+        background-color: #fff;
+        border-color: #dc3545;
+    }
+
+    @media (max-width: 500px) {
+        header {
+            padding: 10px 0px;
+        }
+
+    }
+</style>
+<script type="text/javascript">
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function () {
+        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/683accc92b4de519089b0ce4/1isiqvt8a';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+    })();
+</script>
+<header style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px;  border-bottom: 1px solid #ddd;">
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <button class="toggle-sidebar" id="toggle-sidebar" style="background: none; border: none; cursor: pointer;">
+            <i class="fas fa-bars fa-lg"></i>
+        </button>
+        <h2 style="margin: 0;">Welcome <span style="color: #29377C;">{{ request.user.first_name }}</span></h2>
+    </div>
+
+    <div class="profile" style="position: relative;">
+        {% if request.user.profile.profile_image %}
+        <img src="{{ request.user.profile.profile_image.url }}" alt="Profile" id="profile-icon"
+            style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer; object-fit: cover;" title="Profile">
+        {% else %}
+<div id="profile-avatar" title="Profile"
+    style="width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-weight: 600; cursor: pointer; font-size: 18px; text-transform: uppercase;">
+    {{ request.user.first_name|default:"U"|slice:":1" }}
+</div>
+{% endif %}
+        <!-- Dropdown Menu -->
+        <div id="dropdown-menu"
+            style="display: none; position: absolute; right: 0; top: 50px; background-color: white; border: 1px solid #ddd; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 6px; min-width: 182px; z-index: 1000;">
+            <a href="{% url 'user_profile' %}" class="dropdown-item">View Profile</a>
+            <a href="{% url 'password_change' %}" class="dropdown-item">Change Password</a>
+            <a href="#" class="dropdown-item" onclick="headerConfirmLogout()">Logout</a>
+        </div>
+    </div>
+</header>
+
+<!-- Logout Confirmation Modal -->
+<div id="logout-modal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); justify-content:center; align-items:center; z-index:1100;">
+    <div style="background:#fff; padding: 20px 30px; border-radius: 8px; text-align: center; width: 300px;">
+        <h4>Are you sure you want to logout?</h4>
+        <div style="margin-top: 20px; display: flex; justify-content: space-around;">
+            <button onclick="headerCloseLogoutModal()"
+                style="padding: 8px 16px; border: none; background: #6c757d; color: white; border-radius: 4px;">Cancel</button>
+            <a href="{% url 'user_logout' %}" class="lg-btn"
+                style="padding: 8px 16px; background: #dc3545; color: white; text-decoration: none; border-radius: 4px;">Logout</a>
+        </div>
+    </div>
+</div>
+<script>
+    const profileIcon = document.getElementById('profile-icon');
+    const dropdownMenu = document.getElementById('dropdown-menu');
+    const headerlogoutModal = document.getElementById('logout-modal');
+
+    // Toggle dropdown
+    profileIcon.addEventListener('click', () => {
+        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Close dropdown if clicked outside
+    document.addEventListener('click', function (e) {
+        if (!profileIcon.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            dropdownMenu.style.display = 'none';
+        }
+    });
+
+    // Show logout modal
+    function headerConfirmLogout() {
+        dropdownMenu.style.display = 'none';
+        headerlogoutModal.style.display = 'flex';
+    }
+
+    // Close logout modal
+    function headerCloseLogoutModal() {
+        headerlogoutModal.style.display = 'none';
+    }
+</script>
+<script>
+    const profileAvatar = document.getElementById('profile-avatar');
+    if (profileAvatar) {
+        // Generate a consistent color for each user (based on name)
+        const name = "{{ request.user.first_name|default:'User' }}";
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) {
+            hash = name.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        const hue = hash % 360; // Use hue for distinct colors
+        const bgColor = `hsl(${hue}, 70%, 50%)`;
+        profileAvatar.style.backgroundColor = bgColor;
+
+        // Make clicking it behave like the image
+        profileAvatar.addEventListener('click', () => {
+            const dropdown = document.getElementById('dropdown-menu');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+    }
+</script>
+<script src="{% static 'js/toggle.js' %}"></script>

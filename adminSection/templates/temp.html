@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multi Select Dropdown</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</head>
+
+<body class="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 min-h-screen flex items-center justify-center p-6">
+
+  <div x-data="multiSelectDropdown()" class="w-full max-w-md">
+    <label class="block text-gray-700 font-semibold mb-2">Select Technologies</label>
+
+    <!-- Dropdown container -->
+    <div class="relative">
+      <!-- Selected items -->
+      <div 
+        @click="toggleDropdown()" 
+        class="flex flex-wrap items-center justify-between w-full bg-white border border-gray-300 rounded-xl shadow-sm px-3 py-2 cursor-pointer focus:ring-2 focus:ring-indigo-400"
+      >
+        <template x-for="(option, index) in selected" :key="index">
+          <span class="flex items-center bg-indigo-100 text-indigo-700 text-sm font-medium px-2 py-1 rounded-lg mr-1 mb-1">
+            <span x-text="option"></span>
+            <button type="button" @click.stop="removeOption(option)" class="ml-1 text-indigo-500 hover:text-red-500">×</button>
+          </span>
+        </template>
+
+        <input 
+          x-model="search"
+          @click.stop="open = true"
+          placeholder="Select options..."
+          class="flex-1 outline-none text-gray-700 text-sm bg-transparent min-w-[80px]"
+        />
+      </div>
+
+      <!-- Dropdown list -->
+      <div 
+        x-show="open" 
+        @click.away="open = false"
+        class="absolute z-10 mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto transition-all duration-200"
+      >
+        <template x-for="(option, index) in filteredOptions()" :key="index">
+          <div 
+            @click="selectOption(option)" 
+            class="px-4 py-2 cursor-pointer hover:bg-indigo-100 transition text-gray-700 text-sm"
+            :class="{'bg-indigo-50': selected.includes(option)}"
+          >
+            <span x-text="option"></span>
+          </div>
+        </template>
+        <div x-show="filteredOptions().length === 0" class="px-4 py-2 text-gray-400 text-sm italic">
+          No results found.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function multiSelectDropdown() {
+      return {
+        open: false,
+        search: "",
+        selected: [],
+        options: [
+          "HTML",
+          "CSS",
+          "JavaScript",
+          "React",
+          "Next.js",
+          "Tailwind CSS",
+          "Laravel",
+          "Django",
+          "Python",
+          "MySQL",
+          "MongoDB",
+          "PHP",
+        ],
+        toggleDropdown() {
+          this.open = !this.open;
+        },
+        selectOption(option) {
+          if (!this.selected.includes(option)) {
+            this.selected.push(option);
+          } else {
+            this.selected = this.selected.filter(o => o !== option);
+          }
+        },
+        removeOption(option) {
+          this.selected = this.selected.filter(o => o !== option);
+        },
+        filteredOptions() {
+          return this.options.filter(option =>
+            option.toLowerCase().includes(this.search.toLowerCase()) &&
+            !this.selected.includes(option)
+          );
+        },
+      };
+    }
+  </script>
+</body>
+</html>

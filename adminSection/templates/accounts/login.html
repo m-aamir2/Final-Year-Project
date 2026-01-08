@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="/images/iconlogo.svg">
+  <title>FYPAS</title>
+  <link rel="stylesheet" href="{% static 'css/accounts/login.css' %}">
+  <link rel="stylesheet" href="{% static 'css/alert.css' %}">
+  <link rel="icon" href="{% static 'images/favicon.webp' %}">
+  <style>
+    .container {
+      height: 100vh;
+    }
+
+    /* Responsive Design */
+    @media (max-width:600px) {
+      .formContainer {
+        max-width: 400px;
+      }
+
+      .container {
+        max-width: 92vw;
+        margin: 0 auto;
+      }
+    }
+  </style>
+  <script type="text/javascript">
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function () {
+      var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+      s1.async = true;
+      s1.src = 'https://embed.tawk.to/683accc92b4de519089b0ce4/1isiqvt8a';
+      s1.charset = 'UTF-8';
+      s1.setAttribute('crossorigin', '*');
+      s0.parentNode.insertBefore(s1, s0);
+    })();
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="formContainer">
+      <form class="form" id="loginForm" method="post">
+        {% csrf_token %}
+        <div class="logo">
+          <div>
+            <a href="/">
+              <img src="{% static 'images/uol-logo-green.svg' %}" alt="Logo" class="uol-logo" />
+
+            </a>
+          </div>
+          <span class="span">Welcome Back To <span class="highlight">FYPAS</span></span>
+        </div>
+        <div class="form">
+          <div class="formGroup">
+            <label for="email" class="label">Email address:</label>
+            <input class="input" type="email" id="email" name="email" placeholder="Email" required />
+          </div>
+          <div class="formGroup formGroupPassword">
+            <label for="password" class="label">Password:</label>
+            <input class="input" type="password" id="password" name="password" placeholder="Password" required />
+            <div class="toggleIcon" onclick="togglePasswordVisibility()">
+              <img src="{% static 'images/eye-off.svg' %}" alt="eye-off" id="eyeIcon" class="eye" />
+            </div>
+          </div>
+          {% if m %}
+          <p class="alert alert-error">{{m}}</p>
+          {% endif %}
+          <a class='forgotPassword' href='/accounts/password-reset'>
+            Forgot Password?
+          </a>
+          <button type="submit" class='button'>
+            Sign In
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const passwordInput = document.getElementById('password');
+      const eyeIcon = document.getElementById('eyeIcon');
+
+      const openEyeSrc = "{% static 'images/eye-open.svg' %}";
+      const closedEyeSrc = "{% static 'images/eye-off.svg' %}";
+
+      function togglePasswordVisibility() {
+        if (passwordInput.type === 'password') {
+          passwordInput.type = 'text';
+          eyeIcon.src = openEyeSrc;
+          eyeIcon.alt = 'eye-open';
+        } else {
+          passwordInput.type = 'password';
+          eyeIcon.src = closedEyeSrc;
+          eyeIcon.alt = 'eye-off';
+        }
+      }
+
+      eyeIcon.addEventListener('click', togglePasswordVisibility);
+    });
+  </script>
+
+
+</body>
+
+</html>

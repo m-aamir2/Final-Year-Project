@@ -1,0 +1,117 @@
+.email-input-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    box-sizing: border-box;
+    width: 100%;
+    transition: border-color 0.2s;
+}
+
+.email-input-container:focus-within {
+    border-color: #000;
+    outline: none;
+}
+
+.email-input-container input {
+    border: none;
+    outline: none;
+    width: 50%;
+    padding: 12px 24px;
+    font: inherit;
+    background: transparent;
+}
+
+.email-domain {
+    width: 50%;
+    color: #666;
+    padding: 10px 5px;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.multiselect-container {
+    position: relative;
+    width: 100%;
+}
+
+.multiselect-dropdown {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="%23333" d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    transition: border-color 0.2s;
+}
+
+.multiselect-dropdown:hover {
+    border-color: #666;
+}
+
+.multiselect-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10;
+    display: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.multiselect-options.show {
+    display: block;
+}
+
+.multiselect-option {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+}
+
+.multiselect-option:hover {
+    background: #f0f0f0;
+}
+
+.selected-tags {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    background: #e6f3ff;
+    color: #1e40af;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    border: 1px solid #bfdbfe;
+}
+
+.tag-remove {
+    margin-left: 8px;
+    cursor: pointer;
+    color: #dc2626;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 1;
+}
+
+.tag-remove:hover {
+    color: #b91c1c;
+}

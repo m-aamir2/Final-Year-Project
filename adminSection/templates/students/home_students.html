@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block start %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home-student.css' %}">
+<style>
+  .c-hover:hover{
+    transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(23, 198, 79, 0.25);
+  }
+</style>
+{% endblock %}
+
+<!-- Dashboard Section -->
+<section id="dashboard" class="mb-10">
+  <h3 class="text-2xl font-semibold mb-6 text-gray-800">Dashboard</h3>
+
+  <!-- Student Section -->
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    
+    <!-- Proposal Status -->
+    <div class="c-hover bg-white rounded-2xl shadow-md p-6 border-b-4 border-blue-400 hover:shadow-xl transition">
+      <h4 class="text-lg font-semibold text-gray-700 mb-2">Proposal Status</h4>
+      {% if recent_proposal %}
+      <p class="font-medium mb-1"
+        style="color:
+          {% if recent_proposal.status == 'pending' %}#FFA500
+          {% elif recent_proposal.status == 'supervisor_approved' %}#1E90FF
+          {% elif recent_proposal.status == 'approved' %}#32CD32
+          {% elif recent_proposal.status == 'rejected' %}#DC143C
+          {% endif %}">
+        <strong>{{ recent_proposal.title }}</strong>:
+        {% if recent_proposal.status == 'supervisor_approved' %}
+        Approved by Supervisor
+        {% elif recent_proposal.status == 'approved' %}
+        Fully Approved by Coordinator
+        {% else %}
+        {{ recent_proposal.get_status_display|default:"Pending" }}
+        {% endif %}
+      </p>
+      {% else %}
+      <p class="text-yellow-500 font-medium">No Proposals Submitted</p>
+      {% endif %}
+    </div>
+
+    <!-- Assigned Supervisor -->
+    <div class="c-hover bg-white rounded-2xl shadow-md p-6 border-b-4 border-red-500 hover:shadow-xl transition">
+      <h4 class="text-lg font-semibold text-gray-700 mb-2">Assigned Supervisor</h4>
+      <p class="text-gray-600">
+        {% if active_proposal and active_proposal.supervisors.all and active_proposal.status != 'rejected' %}
+        {% for supervisor in active_proposal.supervisors.all %}
+        {{ supervisor.first_name }} {{ supervisor.last_name }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+        {% else %}
+        Not Assigned
+        {% endif %}
+      </p>
+    </div>
+<!-- Semester Info -->
+    <div class="c-hover bg-white rounded-2xl shadow-md p-6 border-b-4 border-purple-500 hover:shadow-xl transition">
+      <h4 class="text-lg font-semibold text-gray-700 mb-2">Academic Info</h4>
+      <p class="text-gray-600">
+        Semester: <span class="font-medium">{{ semester }}</span>
+        <br>
+        <small class="text-gray-500">
+          {% if semester == '6' %}Proposal Phase
+          {% elif semester == '7' %}Development Phase 1
+          {% elif semester == '8' %}Development Phase 2
+          {% else %}Unknown Phase{% endif %}
+        </small>
+      </p>
+    </div>
+
+    <!-- Research Inspiration -->
+    <div class="c-hover bg-white rounded-2xl shadow-md p-6 border-b-4 border-cyan-400 hover:shadow-xl transition">
+      <h4 class="text-lg font-semibold text-gray-700 mb-2">Research Inspiration</h4>
+      <p class="text-gray-600">Difficulty finding new ideas? 
+        <a href="https://scholar.google.com/" target="_blank" class="text-green-600 font-medium hover:underline">
+          Click here
+        </a> for research inspiration.
+      </p>
+    </div>
+  </div>
+
+  <!-- Additional Info Section -->
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-8">
+    <!-- Group Members -->
+    <div class="c-hover bg-white rounded-2xl shadow-md p-6 border-b-4 border-green-500 hover:shadow-xl transition">
+      <h4 class="text-lg font-semibold text-gray-700 mb-2">Group Members</h4>
+      <p class="text-gray-600">
+        {% if active_proposal and active_proposal.group_members.all %}
+        {% for member in active_proposal.group_members.all %}
+        {{ member.first_name }} {{ member.last_name }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+        {% else %}
+        No group members
+        {% endif %}
+      </p>
+    </div>
+
+    <!-- Upcoming Meetings -->
+    <div class="c-hover bg-white rounded-2xl shadow-md p-6 border-b-4 border-indigo-500 hover:shadow-xl transition">
+      <h4 class="text-lg font-semibold text-gray-700 mb-2">Upcoming Meetings</h4>
+      <p class="text-gray-600">
+        {% if upcoming_meetings_count %}
+        {{ upcoming_meetings_count }} Meeting{{ upcoming_meetings_count|pluralize }}
+        {% if next_meeting %}
+        <br><small class="text-gray-500">Next: {{ next_meeting.date_time|date:"M d, H:i" }}</small>
+        {% endif %}
+        {% else %}
+        No meetings scheduled
+        {% endif %}
+      </p>
+    </div>
+
+    
+
+    <!-- Quick Actions -->
+    <div class="c-hover bg-white rounded-2xl shadow-md p-6 border-b-4 border-pink-500 hover:shadow-xl transition">
+      <h4 class="text-lg font-semibold text-gray-700 mb-2">Quick Actions</h4>
+      <div class="space-y-2">
+        {% if not has_approved_proposal %}
+          <a href="{% url 'upload_proposal' %}" class="block text-sm text-blue-600 hover:underline">Submit Proposal</a>
+        {% endif %}
+        {% if has_approved_proposal and not has_submitted_phase1 %}
+          <a href="{% url 'upload_document' %}" class="block text-sm text-blue-600 hover:underline">Submit Phase 1</a>
+        {% endif %}
+        {% if has_submitted_phase1 and not has_submitted_phase2 %}
+          <a href="{% url 'upload_document' %}" class="block text-sm text-blue-600 hover:underline">Submit Phase 2</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Current Deadline -->
+    <div class="c-hover bg-white rounded-2xl shadow-md p-6 border-b-4 border-yellow-400 hover:shadow-xl transition">
+      <h4 class="text-lg font-semibold text-gray-700 mb-2">Current Deadline</h4>
+      <div class="text-gray-600">
+        {% if relevant_deadline %}
+          <div class="mb-2">
+            <p class="text-sm font-medium text-gray-700">{{ deadline_type }} <span class="font-medium text-gray-800 {% if relevant_deadline < today %}text-red-500{% elif relevant_deadline == today %}text-orange-500{% else %}text-green-600{% endif %}">
+              {{ relevant_deadline|date:"M d, Y" }}
+            </span></p>
+            
+          </div>
+          
+          {% if relevant_deadline < today %}
+            <p class="text-red-500 text-xs mt-2 text-center">Deadline has passed</p>
+          {% elif relevant_deadline == today %}
+            <p class="text-orange-500 text-xs mt-2 text-center">Due today!</p>
+          {% else %}
+            <p class="text-green-500 text-xs mt-2 text-center">Active deadline</p>
+          {% endif %}
+        {% else %}
+          <p class="text-sm text-gray-500 text-center">No upcoming deadlines</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="c-hover bg-white rounded-2xl shadow-md p-6 border-b-4 border-cyan-400 hover:shadow-xl transition">
+      <h4 class="text-lg font-semibold text-gray-700 mb-2">Your Current Progress</h4>
+      <div class=" mt-4 pt-3 border-t border-gray-200">
+        <div class="flex items-center space-x-1">
+          <!-- Proposal -->
+          <div class="flex-1 text-center">
+            <div class="w-3 h-3 rounded-full mx-auto {% if has_approved_proposal %}bg-green-500{% else %}bg-gray-300{% endif %}"></div>
+            <p class="text-xs mt-1 {% if has_approved_proposal %}text-green-600 font-medium{% else %}text-gray-500{% endif %}">Proposal</p>
+          </div>
+          <!-- Phase 1 -->
+          <div class="flex-1 text-center">
+            <div class="w-3 h-3 rounded-full mx-auto {% if has_submitted_phase1 %}bg-green-500{% else %}bg-gray-300{% endif %}"></div>
+            <p class="text-xs mt-1 {% if has_submitted_phase1 %}text-green-600 font-medium{% else %}text-gray-500{% endif %}">Phase 1</p>
+          </div>
+          <!-- Phase 2 -->
+          <div class="flex-1 text-center">
+            <div class="w-3 h-3 rounded-full mx-auto {% if has_submitted_phase2 %}bg-green-500{% else %}bg-gray-300{% endif %}"></div>
+            <p class="text-xs mt-1 {% if has_submitted_phase2 %}text-green-600 font-medium{% else %}text-gray-500{% endif %}">Phase 2</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Progress Indicator -->
+      
+  </div>
+</section>
+{% endblock %}

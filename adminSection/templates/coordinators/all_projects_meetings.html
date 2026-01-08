@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block start %}
+<main class="min-h-screen p-6">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-800">📘 All Projects Meetings</h1>
+      <a href="{% url 'fyp_progress' %}" class="mt-4 sm:mt-0 text-sm text-[#327b32] hover:underline"><i class="fa-solid fa-arrow-left"></i> Back to FYP Progress</a>
+    </div>
+
+    <!-- Search -->
+    <div class="bg-white rounded-2xl shadow-md p-4 mb-6">
+      <div class="flex items-center gap-3">
+        <input type="text" id="searchInput" placeholder="Search by project title or supervisor..."
+          class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none">
+      </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+      <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+        <h2 class="text-2xl font-semibold text-gray-800">Project Meetings Summary</h2>
+        <span class="text-sm text-gray-500">Total: {{ project_meetings|length }} Projects</span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200" id="projectsTable">
+          <thead class="bg-[#327b32] text-white">
+            <tr>
+              <th class="px-6 py-3 text-left text-sm font-semibold">#</th>
+              <th class="px-6 py-3 text-left text-sm font-semibold">Project Title</th>
+              <th class="px-6 py-3 text-left text-sm font-semibold">Supervisor</th>
+              <th class="px-6 py-3 text-left text-sm font-semibold">Total Meetings</th>
+              <th class="px-6 py-3 text-left text-sm font-semibold">Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 bg-white">
+            {% for p in project_meetings %}
+            <tr class="hover:bg-indigo-50 transition">
+              <td class="px-6 py-4 text-gray-500">{{ forloop.counter }}</td>
+              <td class="px-6 py-4 text-gray-800 font-medium">{{ p.project__title }}</td>
+              <td class="px-6 py-4 text-gray-600">{{ p.supervisor__first_name }} {{ p.supervisor__last_name }}</td>
+              <td class="px-6 py-4 text-[#327b32] font-semibold">{{ p.total_meetings }}</td>
+              <td class="px-6 py-4">
+                {% if p.total_meetings > 5 %}
+                  <span class="px-3 py-1 text-xs bg-green-100 text-green-700 rounded-full font-semibold">Active</span>
+                {% elif p.total_meetings > 0 %}
+                  <span class="px-3 py-1 text-xs bg-yellow-100 text-yellow-700 rounded-full font-semibold">Moderate</span>
+                {% else %}
+                  <span class="px-3 py-1 text-xs bg-red-100 text-red-700 rounded-full font-semibold">Inactive</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5" class="text-center text-gray-600 py-6">No projects found.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- JS for Search Filtering -->
+<script>
+  const searchInput = document.getElementById('searchInput');
+  const table = document.getElementById('projectsTable');
+  searchInput.addEventListener('keyup', function() {
+    const filter = this.value.toLowerCase();
+    const rows = table.getElementsByTagName('tr');
+    for (let i = 1; i < rows.length; i++) {
+      const text = rows[i].textContent.toLowerCase();
+      rows[i].style.display = text.includes(filter) ? '' : 'none';
+    }
+  });
+</script>
+{% endblock %}

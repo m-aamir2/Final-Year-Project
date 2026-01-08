@@ -1,0 +1,276 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/iconlogo.svg">
+    <title>FYPAS</title>
+    <link rel="stylesheet" href="{% static 'css/accounts/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/accounts/signup.css' %}">
+    <link rel="icon" href="{% static 'images/favicon.webp' %}">
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/683accc92b4de519089b0ce4/1isiqvt8a';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+        })();
+        </script>
+        <style>
+            .container{
+                height: 100vh;
+            }
+        </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="formContainer">
+            <form class="form" id="loginForm" method="post">
+                {% csrf_token %}
+                <div class="logo">
+                    <div>
+                        <a href="{% url 'home' %}">
+                            <img src="{% static 'images/uol-logo-green.svg' %}" alt="Logo" class="uol-logo" />
+                        </a>
+                    </div>
+                    <span class="span">Register To <span class="highlight">FYPAS</span></span>
+                </div>
+                <div class="form">
+                    <div class="formGroup">
+                        <label for="username" class="label">User Name:</label>
+                        <input class="input" type="text" id="firstname" name="firstname" placeholder="Username"
+                            required />
+                    </div>
+                    <div class="formGroup">
+                        <label for="email" class="label">Email address:</label>
+                        <div class="email-input-container">
+                            <input class="input" type="text" id="email" name="email_input" placeholder="Enter SAPID"
+                                pattern="[0-9]+" required />
+                            <span class="email-domain" aria-live="polite">@student.uol.edu.pk</span>
+                        </div>
+                        <input type="hidden" id="full_email" name="username" />
+                    </div>
+                    <div class="formGroup">
+                        <label class="label">User Type:</label>
+                        <div class="radioGroup">
+                            <div class="radioOption">
+                                <input type="radio" id="user_type_student" name="user_type" value="student" checked
+                                    required />
+                                <label for="user_type_student">Student</label>
+                            </div>
+                            <div class="radioOption">
+                                <input type="radio" id="user_type_supervisor" name="user_type" value="supervisor"
+                                    required />
+                                <label for="user_type_supervisor">Supervisor</label>
+                            </div>
+                        </div>
+                        <span id="user-type-error" class="errorMessage"></span>
+                    </div>
+                    <div class="formGroup" id="expertise-group" style="display: none;">
+                        <label for="expertise" class="label">Expertise:</label>
+                        <div class="multiselect-container">
+                            <div class="multiselect-dropdown" id="expertise-dropdown">
+                                Select Expertise
+                            </div>
+                            <div class="multiselect-options" id="expertise-options">
+                                <div class="multiselect-option" data-value="AI">Artificial Intelligence</div>
+                                <div class="multiselect-option" data-value="ML">Machine Learning</div>
+                                <div class="multiselect-option" data-value="Web Development">Web Development</div>
+                                <div class="multiselect-option" data-value="Mobile Development">Mobile Development</div>
+                                <div class="multiselect-option" data-value="Cybersecurity">Cybersecurity</div>
+                                <div class="multiselect-option" data-value="Cloud Computing">Cloud Computing</div>
+                                <div class="multiselect-option" data-value="IoT">Internet of Things</div>
+                                <div class="multiselect-option" data-value="Data Science">Data Science</div>
+                                <div class="multiselect-option" data-value="Software Engineering">Software Engineering
+                                </div>
+                                <div class="multiselect-option" data-value="Blockchain">Blockchain</div>
+                            </div>
+                            <div class="selected-tags" id="selected-tags"></div>
+                            <input type="hidden" id="expertise" name="expertise" />
+                        </div>
+                    </div>
+                    <div class="formGroup-sem" style="display: flex; flex-direction: column;">
+                        <label class="label">Semester</label>
+                        <div class="radioGroup sem">
+                            <div class="radioOption">
+                                <input type="radio" id="semester_6" name="semester" value="6" checked />
+                                <label for="semester_6">6</label>
+                            </div>
+                            <div class="radioOption">
+                                <input type="radio" id="semester_7" name="semester" value="7" />
+                                <label for="semester_7">7</label>
+                            </div>
+                        </div>
+                    </div>
+                    {% if message %}
+                    <p style="color: red; margin-bottom: 8px;">{{message}}</p>
+                    {% endif %}
+                    <button class="button" type="submit">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            const emailInput = document.getElementById('email');
+            const fullEmailInput = document.getElementById('full_email');
+            const studentRadio = document.getElementById('user_type_student');
+            const supervisorRadio = document.getElementById('user_type_supervisor');
+            const semesterSection = document.querySelector('.formGroup-sem');
+            const semesterInputs = document.querySelectorAll('input[name="semester"]');
+            const emailDomainSpan = document.querySelector('.email-domain');
+            const expertiseGroup = document.getElementById('expertise-group');
+            const expertiseInput = document.getElementById('expertise');
+            const expertiseDropdown = document.getElementById('expertise-dropdown');
+            const expertiseOptions = document.getElementById('expertise-options');
+            const selectedTags = document.getElementById('selected-tags');
+
+            const openEyeSrc = "{% static 'images/eye-open.svg' %}";
+            const closedEyeSrc = "{% static 'images/eye-off.svg' %}";
+
+            // Multiselect functionality
+            let selectedExpertise = [];
+
+            function updateHiddenInput() {
+                expertiseInput.value = selectedExpertise.join(',');
+            }
+
+            function renderTags() {
+                selectedTags.innerHTML = '';
+                selectedExpertise.forEach(value => {
+                    const tag = document.createElement('div');
+                    tag.className = 'tag';
+                    const option = expertiseOptions.querySelector(`[data-value="${value}"]`);
+                    tag.innerHTML = `
+                        ${option.textContent}
+                        <span class="tag-remove" data-value="${value}">×</span>
+                    `;
+                    selectedTags.appendChild(tag);
+                });
+                updateHiddenInput();
+            }
+
+            expertiseDropdown.addEventListener('click', () => {
+                expertiseOptions.classList.toggle('show');
+            });
+
+            expertiseOptions.addEventListener('click', (e) => {
+                const option = e.target.closest('.multiselect-option');
+                if (option) {
+                    const value = option.dataset.value;
+                    if (!selectedExpertise.includes(value)) {
+                        selectedExpertise.push(value);
+                        renderTags();
+                    }
+                    expertiseOptions.classList.remove('show');
+                }
+            });
+
+            selectedTags.addEventListener('click', (e) => {
+                const removeBtn = e.target.closest('.tag-remove');
+                if (removeBtn) {
+                    const value = removeBtn.dataset.value;
+                    selectedExpertise = selectedExpertise.filter(v => v !== value);
+                    renderTags();
+                }
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!expertiseDropdown.contains(e.target) && !expertiseOptions.contains(e.target)) {
+                    expertiseOptions.classList.remove('show');
+                }
+            });
+
+
+            // Function to update email domain and input validation based on user type
+            function updateEmailDomainAndValidation() {
+                const domain = studentRadio.checked ? '@student.uol.edu.pk' : '@se.uol.edu.pk';
+                emailDomainSpan.textContent = domain;
+                emailInput.placeholder = studentRadio.checked ? 'Enter SAPID' : 'Enter Username';
+
+                // Update pattern and clear invalid input
+                if (studentRadio.checked) {
+                    emailInput.setAttribute('pattern', '[0-9]+');
+                    emailInput.value = emailInput.value.replace(/[^0-9]/g, '');
+                } else {
+                    emailInput.setAttribute('pattern', '[a-zA-Z0-9]+');
+                    emailInput.value = emailInput.value.replace(/[^a-zA-Z0-9]/g, '');
+                }
+
+                // Update full email with fixed domain
+                const sapid = emailInput.value;
+                fullEmailInput.value = sapid ? sapid + domain : '';
+            }
+
+            // Restrict email input based on user type
+            emailInput.addEventListener('input', function () {
+                if (studentRadio.checked) {
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                } else {
+                    this.value = this.value.replace(/[^a-zA-Z0-9]/g, '');
+                }
+                const domain = studentRadio.checked ? '@student.uol.edu.pk' : '@se.uol.edu.pk';
+                fullEmailInput.value = this.value ? this.value + domain : '';
+            });
+
+            // Toggle semester section visibility, required attribute, and email domain/validation
+            function toggleSemesterSectionAndEmail() {
+                if (studentRadio.checked) {
+                    semesterSection.style.display = 'flex';
+                    semesterInputs.forEach(input => input.setAttribute('required', 'true'));
+                    expertiseGroup.style.display = 'none';
+                    expertiseInput.removeAttribute('required');
+                    selectedExpertise = [];
+                    renderTags();
+                } else {
+                    semesterSection.style.display = 'none';
+                    semesterInputs.forEach(input => input.removeAttribute('required'));
+                    expertiseGroup.style.display = 'block';
+                    expertiseInput.setAttribute('required', 'true');
+                }
+                updateEmailDomainAndValidation();
+            }
+
+            // Initialize semester section visibility and email domain/validation
+            toggleSemesterSectionAndEmail();
+
+            // Add event listeners to user type radio buttons
+            studentRadio.addEventListener('change', toggleSemesterSectionAndEmail);
+            supervisorRadio.addEventListener('change', toggleSemesterSectionAndEmail);
+
+            // Validate on form submission
+            document.getElementById('loginForm').addEventListener('submit', function (event) {
+                const emailValue = emailInput.value;
+                const domain = studentRadio.checked ? '@student.uol.edu.pk' : '@se.uol.edu.pk';
+                const fullEmail = emailValue + domain;
+                if (!emailValue) {
+                    event.preventDefault();
+                    alert('Please enter a valid ID or username for the email.');
+                } else if (studentRadio.checked && !/^\d+$/.test(emailValue)) {
+                    event.preventDefault();
+                    alert('Student ID must contain only numbers.');
+                } else if (!studentRadio.checked && !/^[a-zA-Z0-9]+$/.test(emailValue)) {
+                    event.preventDefault();
+                    alert('Supervisor username must contain only letters and numbers.');
+                } else if (fullEmail !== fullEmailInput.value) {
+                    event.preventDefault();
+                    alert('Invalid email domain. Only @student.uol.edu.pk or @se.uol.edu.pk is allowed.');
+                } else if (!studentRadio.checked && selectedExpertise.length === 0) {
+                    event.preventDefault();
+                    alert('Please select at least one expertise.');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

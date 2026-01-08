@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block start %}
+{% load static %}
+
+<section style="margin: 40px;">
+    <h3 style="font-size: 24px; font-weight: 600; margin-bottom: 20px;">Extend Deadline: {{ deadline.get_type_display }}</h3>
+    <div class="card">
+        <div style="padding: 15px;">
+            <form method="post" action="{% url 'extend_deadline' deadline.id %}">
+                {% csrf_token %}
+                <label for="new-deadline">New Deadline</label>
+                <input type="date" id="new-deadline" name="new_deadline" required>
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                    <a href="{% url 'coordinator_home' %}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Extend Deadline</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% block start %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/view-proposal.css' %}">
+<style>
+    #rejection-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        justify-content: center;
+        align-items: center;
+        animation: fadeIn 0.2s ease-out;
+    }
+
+    #rejection-modal .modal-content2 {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 520px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+        position: relative;
+    }
+
+    #rejection-modal .close-modal {
+        position: absolute;
+        top: .75rem;
+        right: 1.25rem;
+        font-size: 2rem;
+        font-weight: bold;
+        color: #888;
+        cursor: pointer;
+    }
+
+    #rejection-modal .close-modal:hover {
+        color: #000;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(.95);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+</style>
+{% endblock %}
+
+<div class="proposal-table p-6">
+    <h2 class="text-2xl font-bold mb-6 text-center">Submitted Proposals</h2>
+
+    {% if proposals %}
+    <div class="overflow-x-auto shadow-md rounded-lg">
+        <table class="min-w-full bg-white">
+            <thead class="bg-gray-100 text-gray-700 uppercase text-xs">
+                <tr>
+                    <th class="px-4 py-3 text-left">Title</th>
+                    <th class="px-4 py-3 text-left">Description</th>
+                    <th class="px-4 py-3 text-left">Domain</th>
+                    <th class="px-4 py-3 text-left">Group Members</th>
+                    <th class="px-4 py-3 text-left">Supervisor</th>
+                    <th class="px-4 py-3 text-left">Submitted By</th>
+                    <th class="px-4 py-3 text-left">Status</th>
+                    <th class="px-4 py-3 text-left">Document</th>
+                </tr>
+            </thead>
+            <tbody class="text-sm">
+                {% for proposal in proposals %}
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="px-4 py-3">{{ proposal.title }}</td>
+                    <td class="px-4 py-3">{{ proposal.description|truncatewords:15 }}</td>
+                    <td class="px-4 py-3">{{ proposal.domain }}</td>
+
+                    <td class="px-4 py-3">
+                        {% for m in proposal.group_members.all %}
+                        {{ m.first_name }} ({{ m.username }})<br>
+                        {% empty %}
+                        None
+                        {% endfor %}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        {% for s in proposal.supervisors.all %}
+                        {{ s.first_name }} ({{ s.username }})<br>
+                        {% empty %}
+                        None
+                        {% endfor %}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        {{ proposal.submitted_by.first_name }} ({{ proposal.submitted_by.username }})
+                    </td>
+
+                    <!-- STATUS + REASON -->
+                    <td class="px-4 py-3">
+                        {% if proposal.status == 'rejected' %}
+                        {% with reason=proposal.rejection_reason|default:proposal.coordinator_rejection_reason|default:"No reason provided." %}
+                        <span
+                            class="status-badge rejected show-reason inline-block px-3 py-1 text-xs font-bold text-red-800 bg-red-100 rounded-full cursor-pointer" data-reason="{{ reason|escapejs }}">{{ proposal.get_status_display }}
+                        </span>
+                        {% endwith %}
+                        {% else %}
+                        <span
+                            class="status-badge {{ proposal.status }} inline-block px-3 py-1 text-xs font-bold rounded-full">
+                            {{ proposal.get_status_display }}
+                        </span>
+                        {% endif %}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        {% if proposal.document %}
+                        <a href="{{ proposal.document.url }}" target="_blank"
+                            class="text-blue-600 hover:underline text-sm font-medium">
+                            View / Download
+                        </a>
+                        {% else %}
+                        <span class="text-gray-400">No document</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-center text-gray-500 mt-8 text-lg">No proposals have been submitted yet.</p>
+    {% endif %}
+</div>
+
+<!-- REJECTION REASON MODAL -->
+<div id="rejection-modal">
+    <div class="modal-content2">
+        <span class="close-modal">&times;</span>
+        <h3 class="text-xl font-bold text-red-700 mb-3">Rejection Reason</h3>
+        <p id="rejection-reason-text" class="text-gray-700 leading-relaxed"></p>
+    </div>
+</div>
+
+<!-- JAVASCRIPT (MUST BE AFTER MODAL) -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('rejection-modal');
+        const text = document.getElementById('rejection-reason-text');
+        const close = document.querySelector('.close-modal');
+
+        // Open modal
+        document.querySelectorAll('.show-reason').forEach(badge => {
+            badge.addEventListener('click', function () {
+                const reason = this.getAttribute('data-reason') || 'No reason provided.';
+                text.textContent = reason;
+                modal.style.display = 'flex';
+            });
+        });
+
+        // Close on X
+        close.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        // Close on outside click
+        window.addEventListener('click', e => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+<!-- Optional: Choices.js -->
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
+{% endblock %}

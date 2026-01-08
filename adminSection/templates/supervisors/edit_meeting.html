@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block start %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/add-meetings.css' %}">
+{% endblock %}
+
+<div class="meeting-container">
+    <h2>Edit Meeting</h2>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Edit Meeting Details</h4>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">Project</label>
+                    <select name="project" class="form-select" required disabled>
+                        <option value="{{ meeting.project.id }}" selected>{{ meeting.project.title }}</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Meeting Title</label>
+                    <input type="text" name="title" class="form-control" value="{{ meeting.title }}" required>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Date & Time</label>
+                        <input type="datetime-local" name="date_time" class="form-control"
+                               value="{{ meeting.date_time|date:'Y-m-d\\TH:i' }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Duration (minutes)</label>
+                        <input type="number" name="duration" class="form-control" min="15"
+                               value="{{ meeting.duration }}" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Platform</label>
+                    <select name="platform" id="platform" class="form-select" required>
+                        {% for value, name in platform_choices %}
+                            <option value="{{ value }}" {% if value == meeting.platform %}selected{% endif %}>{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class=" mb-3" id="link-field" {% if meeting.platform == 'in_person' %}style="display: none;"{% endif %}>
+                    <label class="form-label">Meeting Link</label>
+                    <input type="url" name="meeting_link" class="form-control" value="{{ meeting.meeting_link|default:'' }}">
+                </div>
+
+                <div class="mb-3" id="location-field" {% if meeting.platform != 'in_person' %}style="display: none;"{% endif %}>
+                    <label class="form-label">Location</label>
+                    <input type="text" name="location" class="form-control" value="{{ meeting.location|default:'' }}">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Update Meeting</button>
+                <a href="{% url 'add_meetings' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const platformSelect = document.getElementById('platform');
+        const linkField = document.getElementById('link-field');
+        const locationField = document.getElementById('location-field');
+
+        function toggleFields() {
+            if (platformSelect.value === 'in_person') {
+                linkField.style.display = 'none';
+                locationField.style.display = 'block';
+            } else {
+                linkField.style.display = 'block';
+                locationField.style.display = 'none';
+            }
+        }
+
+        platformSelect.addEventListener('change', toggleFields);
+        toggleFields(); // initialize on page load
+    });
+</script>
+
+{% endblock %}

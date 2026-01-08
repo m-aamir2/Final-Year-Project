@@ -1,0 +1,446 @@
+/*
+ 1.) Eric Meyer's Reset
+ ----------------------------------------*/
+/**
+ * Eric Meyer's Reset CSS v2.0 (http://meyerweb.com/eric/tools/css/reset/)
+ * http://cssreset.com
+ */
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 62.5%;
+	vertical-align: baseline;
+	font-weight: normal;
+	font-family: "Montserrat", sans-serif;
+	color: rgba(17, 17, 17, 0.7);
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+	display: block;
+}
+
+body {
+	line-height: 1;
+	font-family: "Montserrat", sans-serif;
+	overflow-x: hidden !important;
+	font-weight: normal;
+	color: #172a39;
+}
+
+/*
+ 1.) Global Typography
+ ----------------------------------------*/
+*,
+:before,
+:after {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	outline: 0;
+}
+
+* {
+	outline: 0;
+}
+
+body * {
+	font-size: 1.6rem;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: 700;
+	color: #111111;
+	font-family: "Montserrat", sans-serif;
+}
+
+h1 {
+	/* font-size: 48px; */
+	font-size: 2.2rem;
+	line-height: 1.2;
+	margin: 0 0 15px 0;
+	color: #111111;
+	font-weight: 700;
+	font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+h2 {
+	/* font-size: 32px; */
+	font-size: 2.4rem;
+	line-height: 1.125;
+	margin: 0 0 20px 0;
+	letter-spacing: -0.05rem;
+}
+
+h3 {
+	font-size: 2rem;
+	line-height: 1.125;
+	margin: 0 0 15px 0;
+}
+
+h4 {
+	/* font-size: 21px; */
+	font-size: 2.1em;
+	line-height: 1;
+	margin: 0 0 1em 0;
+}
+
+h5 {
+	font-size: 1.8rem;
+	line-height: 1.1666;
+	margin: 0 0 1.16667em 0;
+}
+
+h6 {
+	/* font-size: 14px; */
+	font-size: 1.4em;
+	line-height: 1.5;
+	margin: 0 0 1.5em 0;
+}
+
+/*
+ 2.0.5) General Text Formatting
+ -----------------------------------*/
+p {
+	font-size: 1.4rem;
+	line-height: 1.2;
+	margin-bottom: 15px;
+	color: rgba(17, 17, 17, 0.7);
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+strong,
+span {
+	display: inline-block;
+}
+
+/*
+ 2.0.5) General Text Formatting
+ -----------------------------------*/
+/*
+ 2.0.6) Link style
+ -------------------------*/
+a {
+	color: #172a39;
+	text-decoration: none;
+	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	-ms-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
+}
+
+a:hover,
+a:focus {
+	text-decoration: none;
+}
+
+a:active {
+	outline: none;
+}
+
+ul,
+li {
+	list-style-type: none;
+}
+
+a,
+span {
+	display: inline-block;
+}
+
+a:hover {
+	color: #2b6ab0;
+}
+
+.btn {
+	background: #327b32;
+	font-size: 1.4rem;
+	color: #fff;
+	border: 1px solid #327b32;
+	transition: all 0.3s ease-in-out;
+	border-radius: 0;
+	padding: 9px 16px;
+	font-weight: 500;
+	border-radius: 4px;
+}
+
+.btn:hover {
+	background: #fff;
+	color: #327b32;
+}
+
+/* header style start */
+.header {
+	padding: 17px 0;
+	border-bottom: 1px solid #E3E3E3;
+	background: #fff;
+	position: fixed;
+	left: 0;
+	top: 0;
+	right: 0;
+	z-index: 10;
+}
+
+.header .navbar-brand {
+	color: #000;
+	display: flex;
+	font-family: "Plus Jakarta Sans", sans-serif;
+	font-size: 2.4rem;
+	line-height: 1.2;
+	font-weight: 700;
+}
+
+.header .navbar-light .navbar-toggler {
+	border: 0;
+	height: 24px;
+
+}
+
+.header .navbar-toggler:focus {
+	box-shadow: none;
+}
+
+.header .navbar-light .navbar-toggler-icon::after,
+.header .navbar-light .navbar-toggler-icon::before,
+.header .navbar-light .navbar-toggler-icon {
+	background: none;
+	height: 0;
+	background: rgba(0, 0, 0, 0.8);
+	width: 18px;
+	border-radius: 1px;
+	position: relative;
+	transition: all 0.2s ease-in-out;
+
+}
+
+.header .navbar-light .navbar-toggler-icon::after,
+.header .navbar-light .navbar-toggler-icon::before {
+	position: absolute;
+	width: 100%;
+	left: 0;
+	content: "";
+	height: 2px;
+	transform: rotate(-45deg);
+}
+
+.header .navbar-light .navbar-toggler-icon::after {
+	transform: rotate(45deg);
+}
+
+.header .navbar-light .collapsed .navbar-toggler-icon::before {
+	top: -6px;
+	transform: none;
+}
+
+.header .navbar-light .collapsed .navbar-toggler-icon::after {
+	bottom: -6px;
+	transform: none;
+}
+
+.header .navbar-light .collapsed .navbar-toggler-icon {
+	height: 2px;
+}
+
+.header .navbar-nav .nav-link {
+	font-size: 16px;
+}
+
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-nav .nav-link.active,
+.navbar-light .navbar-nav .show>.nav-link {
+	color: #327b32;
+}
+
+/* footer style */
+.footer {
+	background: #222222;
+	padding: 42px 8px 5px;
+}
+
+.footer h2 {
+	color: #FFFFFF;
+	margin-bottom: 27px;
+}
+
+.footer h2 .footer-logo {
+	color: inherit;
+	font-size: inherit;
+	font-weight: inherit;
+}
+
+.footer-desc {
+	color: #B5B3B3;
+	font-size: 1.6rem;
+	line-height: 1.2;
+	margin-bottom: 0;
+}
+
+.footer .heading-block {
+	margin-bottom: 30px;
+}
+
+.footer-nav {
+	text-align: center;
+}
+
+.footer-nav a {
+	color: #FFFFFF;
+	transition: all 0.2s ease-in-out;
+	font-size: 1.6rem;
+	line-height: 1.2;
+	margin: 10px 12px 18px;
+}
+
+.footer-nav a:hover {
+	color: #327b32;
+}
+
+.primary-footer {
+	border-bottom: 1px solid #E3E3E3;
+}
+
+.term-condition {
+	text-align: center;
+}
+
+.copy-rgt,
+.term-condition a {
+	color: #9F9C9C;
+	font-size: 1.4rem;
+	transition: all 0.2s ease-in-out;
+}
+
+.term-condition a {
+	margin: 0 20px 23px;
+}
+
+.term-condition a:hover {
+	color: #327b32;
+}
+
+.copy-rgt {
+	text-align: center;
+}
+
+.secondry-footer {
+	padding: 20px 0;
+}
+
+/* BackGround */
+/* body {
+	background: url('../images/Voice-Subtitle.jpg') no-repeat center top;
+}
+.admin-header,
+.login-sec,
+.plan-sec,
+.how-work,
+.whyneed-sec,
+.header,
+.banner-sec,
+.ready-sec,
+.get-tuch-sec,
+.footer {
+	opacity: 0.5;
+} */

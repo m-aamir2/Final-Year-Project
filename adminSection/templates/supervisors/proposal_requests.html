@@ -1,0 +1,516 @@
+{% extends 'base.html' %}
+{% block start %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/proposal-requests.css' %}">
+{% endblock %}
+<style>
+    .spinner {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #007bff;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    animation: spin 0.8s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+</style>
+        <div class="proposal-requests-container">
+            <h2>Proposal Requests</h2>
+            
+            <div class="filter-options">
+                <div class="search-bar">
+                    <input type="text" id="proposal-search" placeholder="Search by title, students, or domain...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="status-filter">
+                    <select id="status-filter">
+                        <option value="all">All Statuses</option>
+                        <option value="pending">Pending</option>
+                        <option value="supervisor_approved">Supervisor Approved</option>
+                        <option value="approved">Fully Approved</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="proposals-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Project Title</th>
+                            <th>Student Group</th>
+                            <th>Domain</th>
+                            <th>Submitted On</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for proposal in proposals %}
+                        <tr data-status="{{ proposal.status }}" data-students="{% for member in proposal.group_members.all %}{{ member.first_name }} {{ member.last_name }} {% endfor %}" data-domain="{{ proposal.domain }}">
+                            <td>
+                                <a href="#" class="view-details" data-proposal-id="{{ proposal.id }}">
+                                    {{ proposal.title }}
+                                </a>
+                            </td>
+                            <td>
+                                {% for member in proposal.group_members.all %}
+                                <span class="student-tag">{{ member.first_name }} {{ member.last_name }}</span>
+                                {% endfor %}
+                            </td>
+                            <td>{{ proposal.domain }}</td>
+                            <td>{{ proposal.submitted_at|date:"M d, Y" }}</td>
+                            <td>
+                                <span class="status-badge {{ proposal.status }}">
+                                    {{ proposal.get_status_display }}
+                                </span>
+                            </td>
+                            <td class="actions">
+                                {% if proposal.status == 'pending' %}
+                                <button class="btn-accept" data-proposal-id="{{ proposal.id }}">
+                                    <i class="fas fa-check"></i> Accept
+                                </button>
+                                <button class="btn-reject" data-proposal-id="{{ proposal.id }}">
+                                    <i class="fas fa-times"></i> Reject
+                                </button>
+                                {% endif %}
+                                {% if proposal.document %}
+                        <a href="{{ proposal.document.url }}" target="_blank"
+                            class="text-blue-600 hover:underline text-sm font-medium">
+                            View / Download
+                        </a>
+                        {% else %}
+                        <span class="text-gray-400">No document</span>
+                        {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="no-proposals">No proposal requests found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Enhanced Rejection Reason Modal -->
+        <div id="reject-modal" class="modal2">
+            <div class="modal-content2">
+                <span class="close-modal">×</span>
+                
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <div class="modal-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                        </svg>
+                    </div>
+                    <div class="modal-title">
+                        <h3>Reject Proposal Submission</h3>
+                        <p class="modal-subtitle">Please provide constructive feedback for the student group</p>
+                    </div>
+                </div>
+                
+                <!-- Proposal Info -->
+                <div class="proposal-info-card">
+                    <div class="proposal-info-item">
+                        <span class="info-label">Project Title:</span>
+                        <span class="info-value" id="reject-proposal-title"></span>
+                    </div>
+                    <div class="proposal-info-item">
+                        <span class="info-label">Submitted On:</span>
+                        <span class="info-value" id="reject-proposal-date"></span>
+                    </div>
+                </div>
+                
+                <!-- Rejection Form -->
+                <form id="reject-form">
+                    {% csrf_token %}
+                    <input type="hidden" id="reject-proposal-id">
+                    
+                    <div class="form-group">
+                        <label for="reject-reason">Reason for rejection <span class="required">*</span></label>
+                        <div class="input-with-count">
+                            <textarea id="reject-reason" required placeholder="Please be specific about what needs improvement... (minimum 30 characters)"></textarea>
+                            <div class="char-count"><span id="char-count">0</span>/500</div>
+                        </div>
+                        <div class="form-hint">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6c757d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12" y2="8"></line>
+                            </svg>
+                            This feedback will be sent to the student group
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel">Cancel</button>
+                        <button type="submit" class="btn-confirm-reject" disabled>
+                            <span class="btn-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                                </svg>
+                            </span>
+                            Confirm Rejection
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Proposal Details Modal -->
+        <div id="details-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">×</span>
+                <h3 id="details-title"></h3>
+                <div class="details-section">
+                    <h4>Group Members</h4>
+                    <ul id="details-members"></ul>
+                </div>
+                <div class="details-section">
+                    <h4>Project Description</h4>
+                    <p id="details-description"></p>
+                </div>
+                <div class="details-section">
+                    <h4>Domain</h4>
+                    <p id="details-domain"></p>
+                </div>
+                <div class="details-section">
+                    <h4>Status</h4>
+                    <p id="details-status"></p>
+                </div>
+                <div class="details-section">
+                    <h4>Rejection Reason</h4>
+                    <p id="details-rejection-reason"></p>
+                </div>
+                <div class="details-actions">
+                    <a href="#" id="details-download" class="btn-download" download>
+                        <i class="fas fa-download"></i> Download Proposal
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const rejectModal = document.getElementById('reject-modal');
+        const detailsModal = document.getElementById('details-modal');
+        const searchInput = document.getElementById('proposal-search');
+        const statusFilter = document.getElementById('status-filter');
+        const proposalRows = document.querySelectorAll('.proposals-table tbody tr');
+        const closeButtons = document.querySelectorAll('.close-modal');
+        const cancelButton = document.querySelector('.btn-cancel');
+
+        // CSRF token retrieval
+        function getCsrfToken() {
+            const tokenElement = document.querySelector('[name=csrfmiddlewaretoken]');
+            if (tokenElement && tokenElement.value) {
+                return tokenElement.value;
+            }
+            const cookieValue = document.cookie
+                .split('; ')
+                .find(row => row.startsWith('csrftoken='))
+                ?.split('=')[1];
+            if (cookieValue) {
+                return cookieValue;
+            }
+            console.error('CSRF token not found in DOM or cookies');
+            return '';
+        }
+
+        // Character count for rejection reason
+        const rejectReason = document.getElementById('reject-reason');
+        const charCount = document.getElementById('char-count');
+        const submitBtn = document.querySelector('.btn-confirm-reject');
+        
+        if (rejectReason && charCount && submitBtn) {
+            rejectReason.addEventListener('input', function() {
+                const length = this.value.length;
+                charCount.textContent = length;
+                
+                // Update character count color
+                if (length < 30) {
+                    charCount.style.color = '#dc3545';
+                    submitBtn.disabled = true;
+                } else if (length >= 30 && length < 450) {
+                    charCount.style.color = '#28a745';
+                    submitBtn.disabled = false;
+                } else {
+                    charCount.style.color = '#ffc107';
+                    submitBtn.disabled = false;
+                }
+                
+                // Limit to 500 characters
+                if (length > 500) {
+                    this.value = this.value.substring(0, 500);
+                    charCount.textContent = 500;
+                }
+            });
+        }
+
+        function filterProposals() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const statusValue = statusFilter.value;
+            
+            proposalRows.forEach(row => {
+                const title = row.querySelector('td:first-child').textContent.toLowerCase();
+                const students = row.getAttribute('data-students').toLowerCase();
+                const domain = row.getAttribute('data-domain').toLowerCase();
+                const status = row.getAttribute('data-status');
+
+                const matchesSearch = !searchTerm || 
+                    title.includes(searchTerm) || 
+                    students.includes(searchTerm) || 
+                    domain.includes(searchTerm);
+                const matchesStatus = statusValue === 'all' || status === statusValue;
+
+                row.style.display = matchesSearch && matchesStatus ? '' : 'none';
+            });
+        }
+
+        searchInput.addEventListener('input', filterProposals);
+        statusFilter.addEventListener('change', filterProposals);
+
+        // Open reject modal
+        document.querySelectorAll('.btn-reject').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const proposalId = this.getAttribute('data-proposal-id');
+                const proposalTitle = this.closest('tr').querySelector('td:first-child').textContent.trim();
+                const proposalDate = this.closest('tr').querySelector('td:nth-child(4)').textContent.trim();
+
+                if (!proposalId || !proposalTitle) {
+                    console.error('Missing proposal ID or title:', { proposalId, proposalTitle });
+                    alert('Error: Unable to open rejection modal. Please try again or contact support.');
+                    return;
+                }
+
+                try {
+                    document.getElementById('reject-proposal-id').value = proposalId;
+                    document.getElementById('reject-proposal-title').textContent = proposalTitle;
+                    document.getElementById('reject-proposal-date').textContent = proposalDate;
+                    document.getElementById('reject-reason').value = '';
+                    document.getElementById('char-count').textContent = '0';
+                    document.querySelector('.btn-confirm-reject').disabled = true;
+                    rejectModal.style.display = 'block';
+                } catch (error) {
+                    console.error('Error opening reject modal:', error);
+                    alert('Error: Failed to open rejection modal.');
+                }
+            });
+        });
+
+        // Open details modal
+        document.querySelectorAll('.view-details').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const proposalId = this.getAttribute('data-proposal-id');
+
+                fetch(`/proposal/${proposalId}/details/`, {
+                    headers: {
+                        'X-CSRFToken': getCsrfToken(),
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('details-title').textContent = data.title;
+                    const membersList = document.getElementById('details-members');
+                    membersList.innerHTML = '';
+                    data.group_members.forEach(member => {
+                        const li = document.createElement('li');
+                        li.textContent = `${member.first_name} ${member.last_name}`;
+                        membersList.appendChild(li);
+                    });
+                    document.getElementById('details-description').textContent = data.description;
+                    document.getElementById('details-domain').textContent = data.domain;
+                    document.getElementById('details-status').textContent = data.status_display;
+                    document.getElementById('details-rejection-reason').textContent = data.rejection_reason || 'N/A';
+                    document.getElementById('details-download').setAttribute('href', data.document_url);
+                    detailsModal.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error fetching proposal details:', error);
+                    alert(`Failed to load proposal details: ${error.message}`);
+                });
+            });
+        });
+
+        // Close modals
+        function closeAllModals() {
+            rejectModal.style.display = 'none';
+            detailsModal.style.display = 'none';
+        }
+
+        closeButtons.forEach(btn => {
+            btn.addEventListener('click', closeAllModals);
+        });
+
+        cancelButton.addEventListener('click', closeAllModals);
+
+        window.addEventListener('click', function(e) {
+            if (e.target === rejectModal || e.target === detailsModal) {
+                closeAllModals();
+            }
+        });
+
+       // Handle reject form submission with animation
+document.getElementById('reject-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const proposalId = document.getElementById('reject-proposal-id').value;
+    const reason = document.getElementById('reject-reason').value.trim();
+    const rejectBtn = document.querySelector('.btn-confirm-reject');
+
+    if (!reason) {
+        alert('Please provide a reason for rejection.');
+        return;
+    }
+
+    if (reason.length < 30) {
+        alert('Please provide at least 30 characters of feedback.');
+        return;
+    }
+
+    const csrfToken = getCsrfToken();
+    if (!csrfToken) {
+        console.error('No CSRF token available');
+        alert('Error: CSRF token not found. Please refresh the page and try again.');
+        return;
+    }
+
+    // Disable button + show spinner animation
+    rejectBtn.disabled = true;
+    const originalHTML = rejectBtn.innerHTML;
+    rejectBtn.innerHTML = `
+        <span class="spinner"></span> Processing...
+    `;
+
+    fetch(`/proposal/${proposalId}/update-status/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            action: 'reject',
+            reason: reason
+        })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            const row = document.querySelector(`.btn-reject[data-proposal-id="${proposalId}"]`)?.closest('tr');
+            if (row) {
+                row.querySelector('.status-badge').textContent = 'Rejected';
+                row.querySelector('.status-badge').className = 'status-badge rejected';
+                row.setAttribute('data-status', 'rejected');
+                row.querySelector('.btn-accept')?.remove();
+                row.querySelector('.btn-reject')?.remove();
+            }
+            closeAllModals();
+            alert(data.message);
+        } else {
+            alert(data.message || 'Failed to reject proposal.');
+        }
+    })
+    .catch(error => {
+        console.error('Error rejecting proposal:', error);
+        alert(`An error occurred while rejecting the proposal: ${error.message}`);
+    })
+    .finally(() => {
+        // Restore button
+        rejectBtn.disabled = false;
+        rejectBtn.innerHTML = originalHTML;
+    });
+});
+
+// Handle accept button with animation
+document.querySelectorAll('.btn-accept').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const proposalId = this.getAttribute('data-proposal-id');
+        const acceptBtn = this;
+
+        const csrfToken = getCsrfToken();
+        if (!csrfToken) {
+            console.error('No CSRF token available');
+            alert('Error: CSRF token not found. Please refresh the page and try again.');
+            return;
+        }
+
+        if (confirm('Are you sure you want to accept this proposal?')) {
+            // Disable button + show spinner
+            acceptBtn.disabled = true;
+            const originalHTML = acceptBtn.innerHTML;
+            acceptBtn.innerHTML = `<span class="spinner"></span> Processing...`;
+
+            fetch(`/proposal/${proposalId}/update-status/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ action: 'accept' })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    const row = acceptBtn.closest('tr');
+                    row.querySelector('.status-badge').textContent = 'Supervisor Approved';
+                    row.querySelector('.status-badge').className = 'status-badge supervisor_approved';
+                    row.setAttribute('data-status', 'supervisor_approved');
+                    row.querySelector('.btn-accept')?.remove();
+                    row.querySelector('.btn-reject')?.remove();
+                    alert(data.message);
+                } else {
+                    alert(data.message || 'Failed to accept proposal.');
+                }
+            })
+            .catch(error => {
+                console.error('Error accepting proposal:', error);
+                alert(`An error occurred while accepting the proposal: ${error.message}`);
+            })
+            .finally(() => {
+                // Restore button (if still present)
+                if (document.body.contains(acceptBtn)) {
+                    acceptBtn.disabled = false;
+                    acceptBtn.innerHTML = originalHTML;
+                }
+            });
+        }
+    });
+});
+
+    });
+    </script>
+{% endblock %}

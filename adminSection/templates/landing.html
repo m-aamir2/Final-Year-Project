@@ -1,0 +1,548 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FYPAS</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/global.css' %}" media="screen">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/landing.css' %}" media="screen">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/responsive.css' %}" media="screen">
+    <link rel="icon" href="{% static 'images/iub.png' %}">
+    <style>
+        .thankyou-section {
+            background: linear-gradient(135deg, #29377C 0%, #040b13 100%);
+            padding: 6rem 2rem;
+            text-align: center;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            margin-top: 8rem;
+        }
+
+        .thankyou-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            padding: 4rem 3rem;
+            backdrop-filter: blur(4px);
+        }
+
+        .thankyou-title h2 {
+
+            margin-bottom: 2rem;
+            color: #ffffff;
+            position: relative;
+            display: inline-block;
+        }
+
+        .thankyou-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: #ffffff;
+        }
+
+        .thankyou-content p {
+            color: #f1f1f1;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .thankyou-content strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .thankyou-logo {
+            max-width: 180px;
+            margin: 3rem auto 0;
+            display: block;
+            filter: brightness(0) invert(1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .thankyou-logo:hover {
+            transform: scale(1.08);
+        }
+
+        /* Subtle floating animation */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .thankyou-section:hover .thankyou-wrapper {
+            animation: floatUp 3s ease-in-out infinite;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .thankyou-wrapper {
+                padding: 3rem 1.5rem;
+            }
+
+            .thankyou-title h2 {
+                font-size: 2rem;
+            }
+
+            .thankyou-content p {
+                font-size: 1.3rem;
+            }
+
+            .thankyou-logo {
+                max-width: 140px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!--Page Wrapper Start-->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <div class="container-fluid justify-content-between">
+                    <a class="navbar-brand" href="/">
+                        <img src="{% static 'images/header.svg' %}" alt="" width="160px" >
+                    </a>
+                    <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse flex-grow-0" id="navbarNavAltMarkup">
+                        <div class="navbar-nav">
+                            <a class="nav-link" href="https://fyp-uol-se.github.io/UoL-SE-FYP/fyp_updates.html"
+                                target="_blank">FYP Updates</a>
+                            <a class="nav-link" href="https://fyp-uol-se.github.io/UoL-SE-FYP/announcements.html"
+                                target="_blank">Announcements</a>
+                            <a class="nav-link" href="https://fyp-uol-se.github.io/UoL-SE-FYP/forms.html"
+                                target="_blank">Forms</a>
+                            <a class="nav-link"
+                                href="https://fyp-uol-se.github.io/UoL-SE-FYP/documentation_template.html"
+                                target="_blank">Documentation Template</a>
+                            <a class="nav-link" href="#get-tuch-sec">Contact</a>
+                        </div>
+                        <div class="header-profile d-flex align-items-start d-none d-lg-block">
+                            {% if user.is_authenticated %}
+                            <!-- For authenticated users, show a link to their dashboard -->
+                            <a href="{% if user.profile.user_type == 'student' %}{% url 'home_students' %}
+                                          {% elif user.profile.user_type == 'supervisor' %}{% url 'home_supervisors' %}
+                                          {% elif user.profile.user_type == 'coordinator' %}{% url 'home' %}
+                                          {% else %}/{% endif %}" class="btn get-start">
+                                Go to Dashboard
+                                <img class="btn-arrow" src="{% static 'images/btn-arrow.svg' %}" alt="arrow">
+                            </a>
+                            {% else %}
+                            <!-- For unauthenticated users, show the login link -->
+                            <a href="{% url 'login' %}" class="btn get-start">
+                                Login
+                                <img class="btn-arrow" src="{% static 'images/btn-arrow.svg' %}" alt="arrow">
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <div class="content">
+        <!-- banner section Start -->
+        <section class="banner-sec text-center">
+            <div class="container">
+                <h1 class="main-title">
+                    Streamline Your Final Year <span>Project</span> with <span style="font-style: oblique;">FYPAS</span>
+                </h1>
+                <p class="desc">
+                    Manage your final year project efficiently with FYPAS - submit proposals, connect with supervisors,
+                    track progress, and communicate seamlessly, all in one platform.
+                </p>
+                {% if user.is_authenticated %}
+                <a href="{% if user.profile.user_type == 'student' %}{% url 'home_students' %}
+                              {% elif user.profile.user_type == 'supervisor' %}{% url 'home_supervisors' %}
+                              {% elif user.profile.user_type == 'coordinator' %}{% url 'home' %}
+                              {% else %}/{% endif %}" class="btn get-start">
+                    Go to Dashboard
+                    <img class="btn-arrow" src="{% static 'images/btn-arrow.svg' %}" alt="arrow">
+                </a>
+                {% else %}
+                <a href="{% url 'login' %}" class="btn get-start">
+                    Login
+                    <img class="btn-arrow" src="{% static 'images/btn-arrow.svg' %}" alt="arrow">
+                </a>
+                {% endif %}
+                <div class="carousel-box">
+                    <div class="carousel-card">
+                        <img class="placeholder" src="{% static 'images/carousel-card-gray.jpg' %}" alt="img" />
+                        <span class="play-btn">
+                            <img src="{% static 'images/play-icon.svg' %}" alt="play" />
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- banner section end -->
+        <!-- How it works section Start -->
+        <section class="how-work">
+            <div class="container">
+                <div class="heading-block text-center">
+                    <h2 class="main-title">
+                        How FYPAS Works
+                    </h2>
+                </div>
+                <div class="work-steps">
+                    <figure>
+                        <img class="d-block d-lg-none" src="{% static 'images/placeholder-img.jpg' %}"
+                            alt="placeholder">
+                        <img class="placeholder d-none d-lg-block" src="{% static 'images/carousel-card-gray.jpg' %}"
+                            alt="img" />
+                        <span class="play-btn d-none d-lg-block">
+                            <img src="{% static 'images/play-icon.svg' %}" alt="play" />
+                        </span>
+                    </figure>
+                    <div class="work-cards">
+                        <div class="detail">
+                            <strong class="count">
+                                1
+                            </strong>
+                            <h5>Find Available Supervisor</h5>
+                            <p>Explore and select a supervisor for your final year project based on their expertise and
+                                availability on FYPAS.</p>
+                        </div>
+                        <div class="detail">
+                            <strong class="count">
+                                2
+                            </strong>
+                            <h5>Submit Your Proposal</h5>
+                            <p>Submit your project proposal. Ensure accuracy, as proposals cannot be edited after
+                                submission.</p>
+                        </div>
+                        <div class="detail">
+                            <strong class="count">
+                                3
+                            </strong>
+                            <h5>Supervisor Approval</h5>
+                            <p>Your chosen supervisor reviews and approves your proposal, which is then forwarded to the
+                                coordinator for final approval.</p>
+                        </div>
+                        <div class="detail">
+                            <strong class="count">
+                                4
+                            </strong>
+                            <h5>Start Your Project</h5>
+                            <p>Once fully approved, begin working on your project, schedule meetings, and track progress
+                                through FYPAS.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- How it works section end -->
+        <!-- Power section Start -->
+        <section class="power-sec" style="display: none;">
+            <div class="container">
+                <div class="heading-block text-center">
+                    <h2 class="main-title">
+                        The Power of FYPAS
+                    </h2>
+                    <p>
+                        Discover How FYPAS Enhances Efficiency in Managing Final Year Projects
+                    </p>
+                </div>
+                <div class="ext-node">
+                    <span class="obj pwr-obj1"><img src="{% static 'images/power-obj1.svg'%}" alt="obj"></span>
+                    <span class="obj pwr-obj2"><img src="{% static 'images/power-obj2.svg'%}" alt="obj"></span>
+                    <span class="obj pwr-obj3"><img src="{% static 'images/power-obj3.svg'%}" alt="obj"></span>
+                    <div class="video-wrp">
+                        <div class="video-card">
+                            <figure>
+                                <img class="placeholder" src="{% static 'images/carousel-card-gray.jpg' %}" alt="img" />
+                                <span class="play-btn">
+                                    <img src="{% static 'images/play-icon.svg' %}" alt="play" />
+                                </span>
+                            </figure>
+                            <h3 class="text-center">Student Portal</h3>
+                        </div>
+                        <div class="video-card">
+                            <figure>
+                                <img class="placeholder" src="{% static 'images/carousel-card-gray.jpg' %}" alt="img" />
+                                <span class="play-btn">
+                                    <img src="{% static 'images/play-icon.svg' %}" alt="play" />
+                                </span>
+                            </figure>
+                            <h3 class="text-center">Supervisor Portal</h3>
+                        </div>
+                        <div class="video-card">
+                            <figure>
+                                <img class="placeholder" src="{% static 'images/carousel-card-gray.jpg' %}" alt="img" />
+                                <span class="play-btn">
+                                    <img src="{% static 'images/play-icon.svg' %}" alt="play" />
+                                </span>
+                            </figure>
+                            <h3 class="text-center">Coordinator Portal</h3>
+                        </div>
+                        <div class="video-card">
+                            <figure>
+                                <img class="placeholder" src="{% static 'images/carousel-card-gray.jpg' %}" alt="img" />
+                                <span class="play-btn">
+                                    <img src="{% static 'images/play-icon.svg' %}" alt="play" />
+                                </span>
+                            </figure>
+                            <h3 class="text-center">Progress Tracking</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr>
+        <!-- Team Members section Start -->
+        <section class="team-sec">
+            <div class="container">
+                <div class="heading-block text-center">
+                    <h2 class="main-title">
+                        Meet Our Team
+                    </h2>
+                    <p>
+                        The dedicated team behind FYPAS, committed to enhancing the final year project experience.
+                    </p>
+                </div>
+                <div class="ext-node">
+                    <span class="obj pwr-obj1"><img src="{% static 'images/power-obj1.svg'%}" alt="obj"></span>
+                    <span class="obj pwr-obj2"><img src="{% static 'images/power-obj2.svg'%}" alt="obj"></span>
+                    <div class="video-wrp">
+                        <div class="video-card">
+                            <figure>
+                                <img class="placeholder"
+                                    src="https://plus.unsplash.com/premium_photo-1661594484222-54a7eaf5c774?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Z2lybCUyMGdyYXBoaWMlMjBkZXNpZ25lcnxlbnwwfDF8MHx8fDA%3D"
+                                    alt="img" />
+                            </figure>
+                            <h3 class="text-center"></h3>
+                            <p class="text-center">Student Developer (70124659)</p>
+                        </div>
+                        <div class="video-card">
+                            <figure>
+                                <img class="placeholder"
+                                    src="https://images.unsplash.com/photo-1575089976121-8ed7b2a54265?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8ZGV2ZWxvcGVyfGVufDB8fDB8fHww"
+                                    alt="img" />
+                            </figure>
+                            <h3 class="text-center">Shah Nawaz</h3>
+                            <p class="text-center">Student Developer (70126028)</p>
+                        </div>
+                        <div class="video-card">
+                            <figure>
+                                <img class="placeholder"
+                                    src="https://images.unsplash.com/photo-1668554245893-2430d0077217?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGRldmVsb3BlcnxlbnwwfHwwfHx8MA%3D%3D"
+                                    alt="img" />
+                            </figure>
+                            <h3 class="text-center">Saim Ghafoor</h3>
+                            <p class="text-center">Student Developer (70126998)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Team Members section end -->
+        <!-- ready section Start -->
+        <section class="ready-sec">
+            <div class="container">
+                <div class="ready-wrp">
+                    <div class="heading-block text-center">
+                        <h2 class="main-title">
+                            Ready to Streamline Your Final Year Project?
+                        </h2>
+                        <p class="desc">
+                            Experience the efficiency of FYPAS in managing your project lifecycle, from proposal to
+                            completion.
+                        </p>
+                        {% if user.is_authenticated %}
+                        <a href="{% if user.profile.user_type == 'student' %}{% url 'home_students' %}
+                                      {% elif user.profile.user_type == 'supervisor' %}{% url 'home_supervisors' %}
+                                      {% elif user.profile.user_type == 'coordinator' %}{% url 'home' %}
+                                      {% else %}/{% endif %}" class="btn get-started">
+                            Go to Dashboard
+                            <img class="btn-arrow blue" src="{% static 'images/btn-arrow-blue.svg' %}" alt="arrow">
+                            <img class="btn-arrow white" src="{% static 'images/btn-arrow.svg' %}" alt="arrow">
+                        </a>
+                        {% else %}
+                        <a href="{% url 'login' %}" class="btn get-started">
+                            Login
+                            <img class="btn-arrow blue" src="{% static 'images/btn-arrow-blue.svg' %}" alt="arrow">
+                            <img class="btn-arrow white" src="{% static 'images/btn-arrow.svg' %}" alt="arrow">
+                        </a>
+                        {% endif %}
+                    </div>
+                    <div class="obj-img">
+                        <img src="{% static 'images/object-image.png'%}" alt="obj">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ready section end -->
+
+        <!-- Thank You Section -->
+        <section class="thankyou-section">
+            <div class="thankyou-wrapper">
+                <div class="thankyou-title">
+                    <h2>Special Thanks</h2>
+                </div>
+                <div class="thankyou-content">
+                    <p>
+                        We would like to express our deepest gratitude to our <strong>Software Engineering</strong>
+                        Department
+                        for
+                        providing us with the opportunity and resources to develop this project.
+                    </p>
+                    <p>
+                        A special thank you to our project supervisor <strong>Mr. Abdul Dayyan</strong> for his
+                        invaluable
+                        guidance, continuous support, and encouragement throughout this journey.
+                    </p>
+                    <p>
+                        This project wouldn't have been possible without the support of our faculty members and the
+                        university
+                        administration who believed in our vision.
+                    </p>
+                    <img src="{% static 'images/logo.svg' %}" alt="University Logo" class="thankyou-logo">
+                </div>
+            </div>
+        </section>
+        <!-- Thank You Section End -->
+        <!-- Announcements Section Start -->
+        {% if announcements %}
+        <section class="announcement-sec py-5 bg-light">
+            <div class="container">
+                <div class="heading-block text-center mb-4">
+                    <h2 class="main-title">Latest Announcements</h2>
+                    <p class="desc">Stay updated with important deadlines and events from the FYP Coordinator.</p>
+                </div>
+                <div class="list-group">
+                    {% for ann in announcements %}
+                    <div class="list-group-item list-group-item-action">
+                        <h5 class="mb-1">📌 {{ ann.title }}</h5>
+                        <p class="mb-1 for-marg">
+                            Submission date
+                            {% if ann.deadline %}
+                            <strong style="color: #29377C; font-weight: bold;">
+                                (Deadline: {{ ann.deadline|date:"F j, Y" }})
+                            </strong>
+                            {% endif %}
+                        </p>
+                        <small>Posted on {{ ann.post_date|date:"F j, Y" }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        {% endif %}
+        <!-- Announcements Section End -->
+
+        <!-- Announcements Section End -->
+        <!-- Get in touch section Start -->
+        <section class="get-tuch-sec" id="get-tuch-sec">
+            <div class="container">
+                <div class="heading-block text-center">
+                    <h2 class="main-title">
+                        Contact Us
+                    </h2>
+                    <p class="desc">
+                        Have questions or need support? Reach out to the FYPAS team.
+                    </p>
+                </div>
+                <form class="form-block">
+                    <div class="custom-margin">
+                        <label for="exampleInputName" class="form-label">Full Name</label>
+                        <input type="text" placeholder="Full Name" class="form-control" id="exampleInputName"
+                            aria-describedby="name">
+                    </div>
+                    <div class="custom-margin">
+                        <label for="exampleInputEmail1" class="form-label">Email</label>
+                        <input type="email" placeholder="you@university.com" class="form-control"
+                            id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+                    <div class="form-check">
+                        <label for="floatingTextarea" class="form-label">Message</label>
+                        <textarea class="form-control" id="floatingTextarea"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary get-start ">Send Message</button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="primary-footer">
+                <div class="heading-block text-center">
+                    <h2 class="main-title">
+                        <a href="#!" class="footer-logo"><img src="{% static 'images/footer-logo.svg' %}" alt=""
+                                width="160px"></a>
+                    </h2>
+                    <p class="footer-desc">FYPAS streamlines final year project management for students, supervisors,
+                        and coordinators at the University of Lahore.</p>
+                </div>
+                <div class="footer-nav">
+                    <a class="nav-link" href="https://fyp-uol-se.github.io/UoL-SE-FYP/fyp_updates.html"
+                        target="_blank">FYP Updates</a>
+                    <a class="nav-link" href="https://fyp-uol-se.github.io/UoL-SE-FYP/announcements.html"
+                        target="_blank">Announcements</a>
+                    <a class="nav-link" href="https://fyp-uol-se.github.io/UoL-SE-FYP/forms.html"
+                        target="_blank">Forms</a>
+                    <a class="nav-link" href="https://fyp-uol-se.github.io/UoL-SE-FYP/documentation_template.html"
+                        target="_blank">Documentation Template</a>
+                    <a class="nav-link" href="#get-tuch-sec">Contact</a>
+                </div>
+            </div>
+            <div class="secondry-footer">
+                <div class="term-condition">
+                    <a href="#!">Terms & Conditions</a><a href="#!">Privacy Policy</a>
+                </div>
+                <p class="copy-rgt">©
+                    <script>document.write(new Date().getFullYear()) </script> FYPAS. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+    <!-- <div class="blob"></div> -->
+    <!--Page Wrapper End-->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

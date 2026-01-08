@@ -1,0 +1,16 @@
+<svg width="300" height="80" xmlns="http://www.w3.org/2000/svg" style="background: none;">
+  <!-- Graduation Cap Icon -->
+  <g fill="#1A7D5E">
+    <!-- Cap Base -->
+    <path d="M30 40 L50 40 L40 50 Z" />
+    <!-- Cap Top -->
+    <path d="M20 30 H60 L40 20 Z" />
+    <!-- Tassel -->
+    <path d="M40 20 V50 M40 50 H45 V55 H40 Z" />
+  </g>
+
+  <!-- FYPAS Text -->
+  <text x="70" y="50" font-family="Arial, sans-serif" font-size="40" font-weight="bold" fill="#1A7D5E" letter-spacing="2">
+    FYPAS
+  </text>
+</svg>

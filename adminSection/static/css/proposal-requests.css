@@ -1,0 +1,499 @@
+    .proposal-requests-container {
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .proposal-requests-container h2 {
+        color: #2c3e50;
+        margin-bottom: 25px;
+        font-size: 24px;
+    }
+
+    /* Filter Options */
+    .filter-options {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        gap: 15px;
+    }
+
+    .search-bar {
+        position: relative;
+        flex-grow: 1;
+    }
+
+    .search-bar input {
+        width: 100%;
+        padding: 10px 15px 10px 40px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    .search-bar i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #7f8c8d;
+    }
+
+    .status-filter select {
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        background-color: white;
+    }
+
+    /* Proposals Table */
+    .proposals-table {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+
+    .proposals-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .proposals-table th {
+        background-color: #f8f9fa;
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+        color: #2c3e50;
+        border-bottom: 2px solid #eee;
+    }
+
+    .proposals-table td {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        vertical-align: middle;
+    }
+
+    .proposals-table tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    /* Status Badges */
+    .status-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .status-badge.pending {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+
+    .status-badge.supervisor_approved {
+        background-color: #d1ecf1;
+        color: #0c5460;
+    }
+
+    .status-badge.approved {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .status-badge.rejected {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    /* Student Tags */
+    .student-tag {
+        display: inline-block;
+        background-color: #e3f2fd;
+        color: #1976d2;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        font-size: 13px;
+    }
+
+    /* Action Buttons */
+    .actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-accept,
+    .btn-reject,
+    .btn-download {
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        border: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.2s;
+    }
+
+    .btn-accept {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .btn-reject {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .btn-download {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .btn-accept:hover {
+        background-color: #218838;
+    }
+
+    .btn-reject:hover {
+        background-color: #c82333;
+    }
+
+    .btn-download:hover {
+        background-color: #5a6268;
+    }
+
+    /* No Proposals Message */
+    .no-proposals {
+        text-align: center;
+        color: #6c757d;
+        padding: 30px;
+    }
+
+    /* Enhanced Rejection Modal */
+    .modal2 {
+        display: none;
+        position: fixed;
+        z-index: 1050;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(3px);
+        animation: fadeIn 0.3s ease;
+    }
+
+    .modal-content2 {
+        background-color: white;
+        margin: 5% auto;
+        padding: 30px;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 600px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        position: relative;
+        animation: slideIn 0.3s ease;
+        border-top: 4px solid #dc3545;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .modal-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .modal-icon {
+        background-color: #f8d7da;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .modal-title h3 {
+        color: #dc3545;
+        margin: 0 0 5px 0;
+        font-size: 20px;
+    }
+
+    .modal-subtitle {
+        color: #6c757d;
+        margin: 0;
+        font-size: 14px;
+    }
+
+    .proposal-info-card {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 25px;
+        border-left: 3px solid #dc3545;
+    }
+
+    .proposal-info-item {
+        display: flex;
+        margin-bottom: 8px;
+    }
+
+    .proposal-info-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #495057;
+        min-width: 100px;
+    }
+
+    .info-value {
+        color: #212529;
+    }
+
+    #reject-form .form-group {
+        margin-bottom: 25px;
+    }
+
+    #reject-form label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: 600;
+        color: #343a40;
+    }
+
+    .required {
+        color: #dc3545;
+    }
+
+    .input-with-count {
+        position: relative;
+    }
+
+    #reject-form textarea {
+        width: 100%;
+        min-height: 150px;
+        padding: 15px;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        resize: vertical;
+        font-family: inherit;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    #reject-form textarea:focus {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        outline: none;
+    }
+
+    .char-count {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        font-size: 12px;
+        color: #6c757d;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 2px 6px;
+        border-radius: 10px;
+    }
+
+    .form-hint {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 13px;
+        color: #6c757d;
+        margin-top: 8px;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+    }
+
+    .btn-cancel {
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid #ced4da;
+        background-color: white;
+        color: #495057;
+        transition: all 0.2s;
+    }
+
+    .btn-cancel:hover {
+        background-color: #f8f9fa;
+        border-color: #adb5bd;
+    }
+
+    .btn-confirm-reject {
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        border: none;
+        background-color: #dc3545;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s;
+    }
+
+    .btn-confirm-reject:hover {
+        background-color: #c82333;
+    }
+
+    .btn-confirm-reject:disabled {
+        background-color: #e9a3ac;
+        cursor: not-allowed;
+    }
+
+    .btn-icon {
+        display: flex;
+    }
+
+    .close-modal {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #6c757d;
+        transition: color 0.2s;
+    }
+
+    .close-modal:hover {
+        color: #495057;
+    }
+
+    /* Proposal Details Modal */
+    #details-modal {
+        display: none;
+        position: fixed;
+        z-index: 1050;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+        background-color: white;
+        margin: 5% auto;
+        padding: 30px;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 700px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        position: relative;
+    }
+
+    .details-section {
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .details-section:last-child {
+        border-bottom: none;
+    }
+
+    .details-section h4 {
+        color: #2c3e50;
+        margin-bottom: 8px;
+        font-size: 16px;
+    }
+
+    .details-section p {
+        color: #34495e;
+        line-height: 1.5;
+    }
+
+    #details-members {
+        list-style-type: none;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    #details-members li {
+        background-color: #e3f2fd;
+        color: #1976d2;
+        padding: 6px 12px;
+        border-radius: 4px;
+    }
+
+    .details-actions {
+        margin-top: 25px;
+        text-align: center;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .filter-options {
+            flex-direction: column;
+        }
+
+        .proposals-table table {
+            display: block;
+            overflow-x: auto;
+        }
+
+        .actions {
+            flex-wrap: wrap;
+        }
+
+        .modal-content,
+        .modal-content2 {
+            margin: 10% auto;
+            padding: 20px;
+            width: 95%;
+        }
+
+        .proposal-info-item {
+            flex-direction: column;
+        }
+
+        .info-label {
+            min-width: auto;
+            margin-bottom: 3px;
+        }
+    }

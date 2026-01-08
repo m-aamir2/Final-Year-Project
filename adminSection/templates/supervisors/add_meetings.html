@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% block start %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/add-meetings.css' %}">
+{% endblock %}
+
+<div class="meeting-container">
+    <h2>Schedule Meetings</h2>
+
+    <!-- Add Meeting Form -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Add New Meeting</h4>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">Project</label>
+                    <select name="project" class="form-select" required>
+                        <option value="">Select Project</option>
+                        {% for project in projects %}
+                        <option value="{{ project.id }}">{{ project.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Meeting Title</label>
+                    <input type="text" name="title" class="form-control" required>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Date & Time</label>
+                        <input type="datetime-local" name="date_time" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Duration (minutes)</label>
+                        <input type="number" name="duration" class="form-control" min="15" value="60" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Platform</label>
+                    <select name="platform" id="platform" class="form-select" required>
+                        <option value="">Select Platform</option>
+                        {% for value, name in platform_choices %}
+                        <option value="{{ value }}">{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3" id="link-field">
+                    <label class="form-label">Meeting Link</label>
+                    <input type="url" name="meeting_link" class="form-control" required>
+                </div>
+
+                <div class="mb-3" id="location-field" style="display: none;">
+                    <label class="form-label">Location</label>
+                    <input type="text" name="location" class="form-control">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Schedule Meeting</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Existing Meetings -->
+    <div class="card">
+        <div class="card-header">
+            <h4>Your Scheduled Meetings</h4>
+        </div>
+        <div class="card-body">
+            {% if meetings %}
+            <div class="table-responsive">
+                <!-- In your table within add_meetings.html -->
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Project</th>
+                            <th>Title</th>
+                            <th>Date & Time</th>
+                            <th>Platform</th>
+                            <th>Link/Location</th>
+                            <th>Actions</th> <!-- New column for actions -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for meeting in meetings %}
+                        <tr>
+                            <td>{{ meeting.project.title }}</td>
+                            <td>{{ meeting.title }}</td>
+                            <td>{{ meeting.date_time|date:"M d, Y H:i" }}</td>
+                            <td>{{ meeting.get_platform_display }}</td>
+                            <td>
+                                {% if meeting.platform == 'in_person' %}
+                                {{ meeting.location|default:"-" }}
+                                {% else %}
+                                {% if meeting.meeting_link %}
+                                <a href="{{ meeting.meeting_link }}" target="_blank" class="join-btn">Join</a>
+                                {% else %}
+                                -
+                                {% endif %}
+                                {% endif %}
+                            </td>
+                            <td class=" action-buttons">
+                                <a href="{% url 'edit_meeting' meeting.id %}" class="btn btn-sm btn-primary" style="margin-top: 0px;">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                                <form action="{% url 'delete_meeting' meeting.id %}" method="post"
+                                    onsubmit="return confirm('Are you sure you want to delete this meeting?');"
+                                    style="margin: 0;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-danger2"><img
+                                            src="{% static 'images/delete-icn.svg'%}" alt=""></button>
+                                </form>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p>No meetings scheduled yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const platformSelect = document.getElementById('platform');
+        const linkField = document.getElementById('link-field');
+        const locationField = document.getElementById('location-field');
+
+        function toggleFields() {
+            if (platformSelect.value === 'in_person') {
+                linkField.style.display = 'none';
+                locationField.style.display = 'block';
+            } else {
+                linkField.style.display = 'block';
+                locationField.style.display = 'none';
+            }
+        }
+
+        platformSelect.addEventListener('change', toggleFields);
+        toggleFields(); // Initialize on page load
+    });
+</script>
+{% endblock %}

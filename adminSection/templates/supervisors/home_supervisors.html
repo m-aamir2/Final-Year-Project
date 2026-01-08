@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block start %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home-students.css' %}">
+{% endblock %}
+<style>
+   .c-hover:hover{
+    transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(23, 198, 79, 0.25);
+  }
+</style>
+<!-- Dashboard Section -->
+<section id="dashboard" class="mb-10">
+  <h3 class="text-2xl font-semibold mb-6 text-gray-800">Dashboard</h3>
+
+  <!-- Supervisor Overview -->
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    
+    <!-- Proposal Requests -->
+    <div class="c-hover bg-white rounded-2xl shadow-md p-6 border-b-4 border-blue-400 hover:shadow-xl transition">
+      <h4 class="text-lg font-semibold text-gray-700 mb-2">Proposal Requests</h4>
+      <p class="text-green-600 font-medium text-lg">
+        {{ pending_requests_count }}
+      </p>
+    </div>
+
+    <!-- Assigned Groups -->
+    <div class="c-hover bg-white rounded-2xl shadow-md p-6 border-b-4 border-red-500 hover:shadow-xl transition">
+      <h4 class="text-lg font-semibold text-gray-700 mb-2">Assigned Groups</h4>
+      <p class="text-gray-600">
+        {% if assigned_groups_count %}
+          {{ assigned_groups_count }} Group{{ assigned_groups_count|pluralize }}
+        {% else %}
+          Not Assigned
+        {% endif %}
+      </p>
+    </div>
+
+   <!-- Research & Guidance -->
+    <div class="c-hover bg-white rounded-2xl shadow-md p-6 border-b-4 border-purple-500 hover:shadow-xl transition">
+      <h4 class="text-lg font-semibold text-gray-700 mb-2">Research & Guidance</h4>
+      <p class="text-gray-600">
+        Inspire your students with new topics — explore
+        <a href="https://scholar.google.com/" target="_blank" class="text-green-600 font-medium hover:underline">
+          Google Scholar
+        </a>.
+      </p>
+    </div>
+
+    <!-- Active Projects -->
+    <div class="c-hover bg-white rounded-2xl shadow-md p-6 border-b-4 border-cyan-400 hover:shadow-xl transition">
+      <h4 class="text-lg font-semibold text-gray-700 mb-2">Active Projects</h4>
+      <p class="text-gray-600 font-medium">{{ active_projects_count }}</p>
+    </div>
+  </div>
+
+  <!-- Meetings Section -->
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-8">
+    
+    <!-- Upcoming Meetings -->
+    <div class="c-hover bg-white rounded-2xl shadow-md p-6 border-b-4 border-green-500 hover:shadow-xl transition">
+      <h4 class="text-lg font-semibold text-gray-700 mb-2">Upcoming Meetings</h4>
+      <p class="text-gray-600">
+        {% if upcoming_meetings_count %}
+          {{ upcoming_meetings_count }} Meeting{{ upcoming_meetings_count|pluralize }} Scheduled
+        {% else %}
+          No meetings scheduled
+        {% endif %}
+      </p>
+    </div>
+ <div class="c-hover bg-white rounded-2xl shadow-md p-6 border-b-4 border-yellow-400 hover:shadow-xl transition">
+      <h4 class="text-lg font-semibold text-gray-700 mb-2">Project Deadlines</h4>
+      <!-- <p class="text-gray-600">Proposal: <span class="font-medium text-gray-800">Feb 15, 2025</span></p> -->
+       <div class="text-gray-600 space-y-1">
+    {% if deadlines.proposal %}
+      <p class="text-sm">Proposal: <span class="font-medium text-gray-800">{{ deadlines.proposal|date:"M d, Y" }}</span></p>
+    {% endif %}
+    {% if deadlines.phase1 %}
+      <p class="text-sm">Phase 1: <span class="font-medium text-gray-800">{{ deadlines.phase1|date:"M d, Y" }}</span></p>
+    {% endif %}
+    {% if deadlines.phase2 %}
+      <p class="text-sm">Phase 2: <span class="font-medium text-gray-800">{{ deadlines.phase2|date:"M d, Y" }}</span></p>
+    {% endif %}
+    {% if not deadlines.proposal and not deadlines.phase1 and not deadlines.phase2 %}
+      <p class="text-sm text-gray-500">No deadlines set</p>
+    {% endif %}
+  </div>
+    </div>
+    
+
+    <!-- Supervisor Tips -->
+    <div class="c-hover bg-white rounded-2xl shadow-md p-6 border-b-4 border-pink-500 hover:shadow-xl transition">
+      <h4 class="text-lg font-semibold text-gray-700 mb-2">Supervisor Tips</h4>
+      <p class="text-gray-600">
+        Track proposals early and guide students to submit improvements before deadlines.
+      </p>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

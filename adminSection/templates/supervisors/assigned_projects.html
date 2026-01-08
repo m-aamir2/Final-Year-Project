@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% block start %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/assigned-projects.css' %}">
+{% endblock %}
+
+        <div class="assigned-projects-container">
+            <div class="projects-header">
+                <h2>Assigned Projects</h2>
+                <div class="status-filter">
+                    <label>Filter by Status:</label>
+                    <select id="status-filter">
+                        <option value="all">All Projects</option>
+                        <option value="supervisor_approved">Pending Coordinator Approval</option>
+                        <option value="approved">Approved</option>
+
+                    </select>
+                </div>
+            </div>
+
+            <div class="projects-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Project Title</th>
+                            <th>Student Group</th>
+                            <th>Domain</th>
+                            <th>Submitted On</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for project in assigned_projects %}
+                        <tr class="status-{{ project.status }}">
+                            <td>
+                                <a href="#" class="view-details" data-project-id="{{ project.id }}">
+                                    {{ project.title }}
+                                </a>
+                            </td>
+                            <td>
+                                {% for member in project.group_members.all %}
+                                <span class="student-tag">{{ member.first_name }} {{ member.last_name }}</span>
+                                {% endfor %}
+                            </td>
+                            <td>{{ project.domain }}</td>
+                            <td>{{ project.submitted_at|date:"M d, Y" }}</td>
+                            <td>
+                                <span class="status-badge 
+                                    {% if project.status == 'approved' %}approved
+                                    {% elif project.status == 'supervisor_approved' %}pending-coordinator
+                                    {% elif project.status == 'rejected' %}rejected
+                                    {% else %}pending-review{% endif %}">
+                                    {% if project.status == 'approved' %}
+                                    Approved by Coordinator
+                                    {% elif project.status == 'supervisor_approved' %}
+                                    Pending Coordinator Approval
+                                    {% elif project.status == 'rejected' %}
+                                    {% if project.coordinator_rejection_reason %}
+                                    Rejected by Coordinator
+                                    {% else %}
+                                    Rejected by You
+                                    {% endif %}
+                                    {% else %}
+                                    Pending Your Review
+                                    {% endif %}
+                                </span>
+                                {% if project.status == 'rejected' %}
+                                <div class="rejection-details">
+                                    {% if project.rejection_reason %}
+                                    <div><strong>Your Reason:</strong> {{ project.rejection_reason }}</div>
+                                    {% endif %}
+                                    {% if project.coordinator_rejection_reason %}
+                                    <div><strong>Coordinator Reason:</strong> {{ project.coordinator_rejection_reason }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </td>
+
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="no-projects">
+                                No assigned projects found.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Status filter functionality
+            document.getElementById('status-filter').addEventListener('change', function () {
+                const status = this.value;
+                const rows = document.querySelectorAll('tbody tr');
+
+                rows.forEach(row => {
+                    if (status === 'all' || row.classList.contains(`status-${status}`)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+
+            // View details functionality
+            document.querySelectorAll('.view-details').forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const projectId = this.getAttribute('data-project-id');
+                    window.location.href = `/project/${projectId}/details/`;
+                });
+            });
+
+            // Approve/Reject buttons functionality
+            document.querySelectorAll('.btn-approve').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    if (confirm('Are you sure you want to approve this project?')) {
+                        const projectId = this.getAttribute('data-project-id');
+                        updateProjectStatus(projectId, 'approve');
+                    }
+                });
+            });
+
+            document.querySelectorAll('.btn-reject').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const projectId = this.getAttribute('data-project-id');
+                    const reason = prompt('Please enter the reason for rejection:');
+                    if (reason) {
+                        updateProjectStatus(projectId, 'reject', reason);
+                    }
+                });
+            });
+
+            function updateProjectStatus(projectId, action, reason = '') {
+                fetch(`/api/update-project-status/${projectId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        action: action,
+                        reason: reason
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload();
+                        } else {
+                            alert('Error: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while updating the status');
+                    });
+            }
+        });
+    </script>
+{% endblock %}

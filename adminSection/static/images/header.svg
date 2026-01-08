@@ -1,0 +1,41 @@
+<svg width="400" height="150" viewBox="0 0 300 150"
+								xmlns="http://www.w3.org/2000/svg">
+								<style>
+									.text {
+										font-family: Poppins, sans-serif;
+										font-size: 60px;
+										font-weight: bold;
+									}
+
+									.f {
+										fill: #29377C;
+									}
+
+									.y {
+										fill: #29377C;
+									}
+
+									.p {
+										fill: #29377C;
+									}
+
+									.a {
+										fill: #29377C;
+									}
+
+									.s {
+										fill: #29377C;
+									}
+								</style>
+								<g transform="translate(20, 80)">
+									<text x="0" y="0" class="text">
+										<tspan class="f">F</tspan>
+										<tspan class="y" dx="10">Y</tspan>
+										<tspan class="p" dx="10">P</tspan>
+										<tspan class="a" dx="10">A</tspan>
+										<tspan class="s" dx="10">S</tspan>
+									</text>
+									<path d="M50 100 Q70 80 90 100 T130 100 T170 100" fill="none" stroke="#1E90FF"
+										stroke-width="5" />
+								</g>
+							</svg>
